@@ -12,8 +12,8 @@ heka requires the latest Golang tip at the moment, which will be
 automatically downloaded and compiled. Compiling Go requires some C
 tools, per the Go docs:
 
-     The Go tool chain is written in C. To build it, you need a C
-     compiler installed.
+    The Go tool chain is written in C. To build it, you need a C
+    compiler installed.
 
     On OS X, a C compiler is bundled in the command line tools for
     Xcode, and you don't need to install the whole Xcode to compile Go.
