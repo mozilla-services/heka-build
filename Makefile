@@ -9,7 +9,7 @@ GOPATH = $GOPATH:$(HERE)
 BUILD_DIRS = bin/go build src/*
 
 
-.PHONY: all build test build_rpms mach
+.PHONY: all build test clean-env clean gospec
 .SILENT: test
 
 all: build
@@ -38,15 +38,13 @@ src/github.com/rafrombrc/go-notify:
 src/github.com/ugorji/go-msgpack:
 	$(GOCMD) get github.com/ugorji/go-msgpack
 
-godeps: src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
-
-src/heka: godeps
+src/heka/README.md: src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
 	cd src && \
 	git clone git@github.com:mozilla-services/heka.git
 	cd src && \
 	$(GOCMD) install heka/hekad
 
-build: $(GOBIN) src/heka
+build: $(GOBIN) src/heka/README.md
 
 src/code.google.com/p/gomock/gomock:
 	$(GOCMD) get code.google.com/p/gomock/gomock
