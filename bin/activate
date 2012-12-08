@@ -1,0 +1,71 @@
+# This file must be used with "source bin/activate" *from bash*
+# you cannot run it directly
+
+deactivate () {
+    # reset old environment variables
+    if [ -n "$_OLD_GOENV_PATH" ] ; then
+        PATH="$_OLD_GOENV_PATH"
+        export PATH
+        unset _OLD_GOENV_PATH
+    fi
+    if [ -n "$_OLD_GOENV_GOPATH" ] ; then
+        GOPATH="$_OLD_GOENV_GOPATH"
+        export GOPATH
+        unset _OLD_GOENV_GOPATH
+    else
+        unset GOPATH
+    fi
+
+    # This should detect bash and zsh, which have a hash command that must
+    # be called to get it to forget past commands.  Without forgetting
+    # past commands the $PATH changes we made may not be respected
+    if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
+        hash -r
+    fi
+
+    if [ -n "$_OLD_GOENV_PS1" ] ; then
+        PS1="$_OLD_GOENV_PS1"
+        export PS1
+        unset _OLD_GOENV_PS1
+    fi
+
+    if [ ! "$1" = "nondestructive" ] ; then
+    # Self destruct!
+        unset -f deactivate
+    fi
+}
+
+# unset irrelevant variables
+deactivate nondestructive
+
+# unset GOPATH if set
+# this will fail if GOPATH is set to the empty string (which is bad anyway)
+# could use `if (set -u; : $GOPATH) ;` in bash
+if [ -n "$GOPATH" ] ; then
+    _OLD_GOENV_GOPATH="$GOPATH"
+    unset GOPATH
+fi
+
+GOPATH="/Users/rob/go/heka-build"
+export GOPATH
+
+_OLD_GOENV_PATH="$PATH"
+PATH="$GOPATH/bin:$PATH"
+export PATH
+
+if [ -z "$GOENV_DISABLE_PROMPT" ] ; then
+    _OLD_GOENV_PS1="$PS1"
+    if [ "x" != x ] ; then
+	    PS1="$PS1"
+    else
+        PS1="[`basename \"$GOPATH\"`]$PS1"
+    fi
+    export PS1
+fi
+
+# This should detect bash and zsh, which have a hash command that must
+# be called to get it to forget past commands.  Without forgetting
+# past commands the $PATH changes we made may not be respected
+if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
+    hash -r
+fi
