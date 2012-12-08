@@ -29,19 +29,24 @@ $(GOBIN): build/go
 	./all.bash
 	cp build/go/bin/go $(HERE)/bin/go
 
-godeps:
+src/github.com/bitly/go-simplejson:
 	$(GOCMD) get github.com/bitly/go-simplejson
+
+src/github.com/rafrombrc/go-notify:
 	$(GOCMD) get github.com/rafrombrc/go-notify
+
+src/github.com/ugorji/go-msgpack:
 	$(GOCMD) get github.com/ugorji/go-msgpack
 
-src/heka/README.md: godeps
+godeps: src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
+
+src/heka: godeps
 	cd src && \
 	git clone git@github.com:mozilla-services/heka.git
+	cd src && \
+	$(GOCMD) install heka/hekad
 
-heka: src/heka/README.md
-	cd src && $(GOCMD) install heka/hekad
-
-build: $(GOBIN) heka
+build: $(GOBIN) src/heka
 
 src/code.google.com/p/gomock/gomock:
 	$(GOCMD) get code.google.com/p/gomock/gomock
