@@ -43,3 +43,20 @@ Check out this repository, then run::
 
 The appropriate Go dependencies will be downloaded and installed, and
 the hekad binary will be built.
+
+Running Tests
+=============
+
+Run::
+
+    make test
+
+Appropriate test packages will be installed if needed and the tests
+will be run.
+
+Optional Mozilla Plugins
+========================
+
+Mozilla heka plugins may be installed by running::
+
+    make moz-plugins
