@@ -24,3 +24,4 @@ _testmain.go
 bin/go
 bin/hekad
 build/
+etc/
