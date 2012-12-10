@@ -9,7 +9,7 @@ GOPATH = $GOPATH:$(HERE)
 BUILD_DIRS = bin/go build src/*
 
 
-.PHONY: all build test clean-env clean gospec
+.PHONY: all build test clean-env clean gospec moz-plugins
 .SILENT: test
 
 all: build
@@ -43,6 +43,12 @@ src/heka/README.md: src/github.com/bitly/go-simplejson src/github.com/rafrombrc/
 	git clone git@github.com:mozilla-services/heka.git
 	cd src && \
 	$(GOCMD) install heka/hekad
+
+src/heka-mozsvc-plugins/README.md:
+	cd src && \
+	git clone git@github.com:mozilla-services/heka-mozsvc-plugins.git
+
+moz-plugins: src/heka-mozsvc-plugins/README.md
 
 build: $(GOBIN) src/heka/README.md
 
