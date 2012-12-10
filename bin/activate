@@ -46,7 +46,9 @@ if [ -n "$GOPATH" ] ; then
     unset GOPATH
 fi
 
-GOPATH="/Users/rob/go/heka-build"
+# convoluted but safe (I think) way to get the parent directory of where
+# this script's install folder
+GOPATH="$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" )"
 export GOPATH
 
 _OLD_GOENV_PATH="$PATH"
