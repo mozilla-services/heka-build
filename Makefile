@@ -38,7 +38,7 @@ src/github.com/rafrombrc/go-notify:
 src/github.com/ugorji/go-msgpack:
 	$(GOCMD) get github.com/ugorji/go-msgpack
 
-src/github.com/mozilla-services/README.md: src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
+src/github.com/mozilla-services/heka/README.md: src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
 	cd src && \
 	mkdir -p github.com/mozilla-services && \
 	cd github.com/mozilla-services && \
@@ -49,13 +49,13 @@ src/github.com/mozilla-services/README.md: src/github.com/bitly/go-simplejson sr
 	$(GOCMD) install github.com/mozilla-services/heka/pipeline
 	$(GOCMD) install github.com/mozilla-services/heka/message
 
-src/heka-mozsvc-plugins/README.md:
-	cd src && \
+src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
+	cd src/github.com/mozilla-services && \
 	git clone git@github.com:mozilla-services/heka-mozsvc-plugins.git
 
-moz-plugins: src/heka-mozsvc-plugins/README.md
+moz-plugins: src/github.com/mozilla-services/heka-mozsvc-plugins/README.md
 
-build: $(GOBIN) src/github.com/mozilla-services/README.md
+build: $(GOBIN) src/github.com/mozilla-services/heka/README.md
 
 src/code.google.com/p/gomock/gomock:
 	$(GOCMD) get code.google.com/p/gomock/gomock
