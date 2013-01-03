@@ -38,11 +38,16 @@ src/github.com/rafrombrc/go-notify:
 src/github.com/ugorji/go-msgpack:
 	$(GOCMD) get github.com/ugorji/go-msgpack
 
-src/heka/README.md: src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
+src/github.com/mozilla-services/README.md: src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
 	cd src && \
+	mkdir -p github.com/mozilla-services && \
+	cd github.com/mozilla-services && \
 	git clone git@github.com:mozilla-services/heka.git
 	cd src && \
-	$(GOCMD) install heka/hekad
+	$(GOCMD) install github.com/mozilla-services/heka/hekad
+	$(GOCMD) install github.com/mozilla-services/heka/testsupport
+	$(GOCMD) install github.com/mozilla-services/heka/pipeline
+	$(GOCMD) install github.com/mozilla-services/heka/message
 
 src/heka-mozsvc-plugins/README.md:
 	cd src && \
@@ -50,7 +55,7 @@ src/heka-mozsvc-plugins/README.md:
 
 moz-plugins: src/heka-mozsvc-plugins/README.md
 
-build: $(GOBIN) src/heka/README.md
+build: $(GOBIN) src/github.com/mozilla-services/README.md
 
 src/code.google.com/p/gomock/gomock:
 	$(GOCMD) get code.google.com/p/gomock/gomock
@@ -63,6 +68,6 @@ src/github.com/rafrombrc/gospec/src/gospec:
 gospec: src/github.com/rafrombrc/gospec/src/gospec
 
 test: gomock gospec
-	$(GOCMD) test -i heka/pipeline
-	$(GOCMD) test heka/pipeline
-	$(GOCMD) test heka/message
+	$(GOCMD) test -i github.com/mozilla-services/heka/pipeline
+	$(GOCMD) test github.com/mozilla-services/heka/pipeline
+	$(GOCMD) test github.com/mozilla-services/heka/message
