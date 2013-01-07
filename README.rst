@@ -30,9 +30,9 @@ tools, per the Go docs:
     On Windows, install gcc with MinGW. (Make sure you add its bin
     subdirectory to your PATH.)
 
-If you already have a recent Go tip (from at least Nov 12th), you may
-specify it using the environment variable GOBIN, and this step will be
-skipped.
+If you already have a recent Go tip (from at least Nov 12th), you will
+need to create an alias to it at ``bin/go`` to have the Makefile skip
+building a local copy.
 
 Installing
 ==========
