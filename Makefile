@@ -45,9 +45,6 @@ src/github.com/mozilla-services/heka/README.md: src/github.com/bitly/go-simplejs
 	git clone git@github.com:mozilla-services/heka.git
 	cd src && \
 	$(GOCMD) install github.com/mozilla-services/heka/hekad
-	$(GOCMD) install github.com/mozilla-services/heka/testsupport
-	$(GOCMD) install github.com/mozilla-services/heka/pipeline
-	$(GOCMD) install github.com/mozilla-services/heka/message
 
 src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
 	cd src/github.com/mozilla-services && \
