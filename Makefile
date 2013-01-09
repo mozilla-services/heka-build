@@ -81,7 +81,7 @@ test: gomock gospec
 src/github.com/mozilla-services/heka/hekad/plugin_loader.go:
 	cd src/github.com/mozilla-services/heka/hekad && \
 		cp plugin_loader.go.in plugin_loader.go
-	rm bin/hekad
+	rm -f bin/hekad
 
 pluginloader: src/github.com/mozilla-services/heka/hekad/plugin_loader.go
 
