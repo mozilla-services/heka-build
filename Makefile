@@ -63,7 +63,7 @@ src/github.com/crankycoder/g2s:
 
 g2s: src/github.com/crankycoder/g2s
 
-moz-plugins: g2s src/github.com/mozilla-services/heka-mozsvc-plugins/README.md
+moz-plugins: $(GOBIN) g2s src/github.com/mozilla-services/heka-mozsvc-plugins/README.md
 
 build: hekad
 
