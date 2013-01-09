@@ -78,7 +78,7 @@ test: gomock gospec
 	$(GOCMD) test github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test github.com/mozilla-services/heka/message
 
-src/github.com/mozilla-services/heka/hekad/plugin_loader.go:
+src/github.com/mozilla-services/heka/hekad/plugin_loader.go: src/github.com/mozilla-services/heka/README.md
 	cd src/github.com/mozilla-services/heka/hekad && \
 		cp plugin_loader.go.in plugin_loader.go
 	rm -f bin/hekad
