@@ -47,7 +47,9 @@ src/github.com/mozilla-services/heka/README.md:
 	cd src/github.com/mozilla-services && \
 		git clone https://github.com/mozilla-services/heka.git
 
-bin/hekad: src/github.com/mozilla-services/heka/README.md $(GOBIN) src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
+heka-source: src/github.com/mozilla-services/heka/README.md
+
+bin/hekad: heka-source $(GOBIN) src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
 	cd src && \
 		$(GOCMD) install github.com/mozilla-services/heka/hekad
 
@@ -57,6 +59,8 @@ src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
 	mkdir -p src/github.com/mozilla-services
 	cd src/github.com/mozilla-services && \
 		git clone https://github.com/mozilla-services/heka-mozsvc-plugins.git
+
+moz-plugins-source: src/github.com/mozilla-services/heka-mozsvc-plugins/README.md
 
 src/github.com/crankycoder/g2s:
 	$(GOCMD) get github.com/crankycoder/g2s
@@ -82,7 +86,7 @@ test: gomock gospec
 	$(GOCMD) test github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test github.com/mozilla-services/heka/message
 
-src/github.com/mozilla-services/heka/hekad/plugin_loader.go: src/github.com/mozilla-services/heka/README.md
+src/github.com/mozilla-services/heka/hekad/plugin_loader.go: heka-source
 	cd src/github.com/mozilla-services/heka/hekad && \
 		cp plugin_loader.go.in plugin_loader.go
 	rm -f bin/hekad
@@ -92,7 +96,7 @@ pluginloader: src/github.com/mozilla-services/heka/hekad/plugin_loader.go
 rpms: pluginloader moz-plugins build
 	./make_rpms.sh
 
-dev: src/github.com/mozilla-services/heka/README.md
+dev: heka-source
 	cd src/github.com/mozilla-services/heka && \
 	git config remote.origin.url git@github.com:mozilla-services/heka.git
 
