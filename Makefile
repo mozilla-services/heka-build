@@ -43,9 +43,8 @@ src/github.com/ugorji/go-msgpack:
 	$(GOCMD) get github.com/ugorji/go-msgpack
 
 src/github.com/mozilla-services/heka/README.md:
-	cd src && \
-		mkdir -p github.com/mozilla-services && \
-		cd github.com/mozilla-services && \
+	mkdir -p src/github.com/mozilla-services
+	cd src/github.com/mozilla-services && \
 		git clone git@github.com:mozilla-services/heka.git
 
 bin/hekad: src/github.com/mozilla-services/heka/README.md $(GOBIN) src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
@@ -55,8 +54,9 @@ bin/hekad: src/github.com/mozilla-services/heka/README.md $(GOBIN) src/github.co
 hekad: bin/hekad
 
 src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
+	mkdir -p src/github.com/mozilla-services
 	cd src/github.com/mozilla-services && \
-	git clone git@github.com:mozilla-services/heka-mozsvc-plugins.git
+		git clone git@github.com:mozilla-services/heka-mozsvc-plugins.git
 
 src/github.com/crankycoder/g2s:
 	$(GOCMD) get github.com/crankycoder/g2s
