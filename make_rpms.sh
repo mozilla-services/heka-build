@@ -5,12 +5,12 @@ command -v fpm >/dev/null 2>&1 || {
 	exit 1
 }
 
-mkdir -p tmp/usr/bin
+mkdir -p tmp_rpm_root/usr/bin
 mkdir -p rpms
 VERSION = `./bin/hekad -version`
-cp bin/hekad tmp/usr/bin
+cp bin/hekad tmp_rpm_root/usr/bin
 cd tmp_rpm_root
 fpm -s dir -t rpm -n "hekad" -v $VERSION usr
-mv 'hekad-*.rpm' ../rpms
+mv hekad-*.rpm ../rpms
 cd ..
 rm -fr tmp_rpm_root
