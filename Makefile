@@ -44,7 +44,7 @@ src/github.com/mozilla-services/heka/README.md: src/github.com/bitly/go-simplejs
 		cd github.com/mozilla-services && \
 		git clone git@github.com:mozilla-services/heka.git
 
-bin/hekad: src/github.com/mozilla-services/heka/README.md
+bin/hekad: $(GOBIN) src/github.com/mozilla-services/heka/README.md
 	cd src && \
 		$(GOCMD) install github.com/mozilla-services/heka/hekad
 
@@ -61,7 +61,7 @@ g2s: src/github.com/crankycoder/g2s
 
 moz-plugins: g2s src/github.com/mozilla-services/heka-mozsvc-plugins/README.md
 
-build: $(GOBIN) hekad
+build: hekad
 
 src/code.google.com/p/gomock/gomock:
 	$(GOCMD) get code.google.com/p/gomock/gomock
