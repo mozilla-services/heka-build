@@ -67,7 +67,7 @@ src/github.com/crankycoder/g2s:
 
 g2s: src/github.com/crankycoder/g2s
 
-moz-plugins: $(GOBIN) g2s src/github.com/mozilla-services/heka-mozsvc-plugins/README.md
+moz-plugins: $(GOBIN) g2s moz-plugins-source
 
 build: hekad
 
@@ -94,7 +94,10 @@ src/github.com/mozilla-services/heka/hekad/plugin_loader.go: heka-source
 pluginloader: src/github.com/mozilla-services/heka/hekad/plugin_loader.go
 
 rpms: pluginloader moz-plugins build
-	./make_rpms.sh
+	./make_pkgs.sh rpm
+
+debs: pluginloader moz-plugins build
+	./make-pkgs.sh deb
 
 dev: heka-source
 	cd src/github.com/mozilla-services/heka && \
