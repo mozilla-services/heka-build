@@ -43,16 +43,25 @@ src/github.com/mozilla-services/heka/README.md: src/github.com/bitly/go-simplejs
 	mkdir -p github.com/mozilla-services && \
 	cd github.com/mozilla-services && \
 	git clone git@github.com:mozilla-services/heka.git
+
+bin/hekad: src/github.com/mozilla-services/heka/README.md
 	cd src && \
 	$(GOCMD) install github.com/mozilla-services/heka/hekad
+
+hekad: bin/hekad
 
 src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
 	cd src/github.com/mozilla-services && \
 	git clone git@github.com:mozilla-services/heka-mozsvc-plugins.git
 
-moz-plugins: src/github.com/mozilla-services/heka-mozsvc-plugins/README.md
+src/github.com/crankycoder/g2s:
+	$(GOCMD) get github.com/crankycoder/g2s
 
-build: $(GOBIN) src/github.com/mozilla-services/heka/README.md
+g2s: src/github.com/crankycoder/g2s
+
+moz-plugins: g2s src/github.com/mozilla-services/heka-mozsvc-plugins/README.md
+
+build: $(GOBIN) hekad
 
 src/code.google.com/p/gomock/gomock:
 	$(GOCMD) get code.google.com/p/gomock/gomock
@@ -68,3 +77,13 @@ test: gomock gospec
 	$(GOCMD) test -i github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test github.com/mozilla-services/heka/message
+
+src/github.com/mozilla-services/heka/hekad/plugin_loader.go:
+	cd src/github.com/mozilla-services/heka/hekad && \
+		cp plugin_loader.go.in plugin_loader.go
+	rm bin/hekad
+
+pluginloader: src/github.com/mozilla-services/heka/hekad/plugin_loader.go
+
+rpms: pluginloader build moz-plugins
+	./make_rpms.sh
