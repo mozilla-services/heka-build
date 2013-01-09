@@ -6,7 +6,7 @@ GOBIN = $(HERE)/bin/go
 GOCMD = GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
 
-BUILD_DIRS = bin/go build src/*
+GO_BUILD_DIRS = bin/go build
 
 
 .PHONY: all build test clean-env clean gospec moz-plugins
@@ -14,10 +14,14 @@ BUILD_DIRS = bin/go build src/*
 
 all: build
 
-clean-env:
+clean-go:
 	rm -rf $(BUILD_DIRS)
 
-clean: clean-env
+clean-heka:
+	rm -fr src/*
+	rm bin/hekad
+
+clean: clean-go clean-heka
 
 build/go:
 	mkdir build
@@ -38,13 +42,13 @@ src/github.com/rafrombrc/go-notify:
 src/github.com/ugorji/go-msgpack:
 	$(GOCMD) get github.com/ugorji/go-msgpack
 
-src/github.com/mozilla-services/heka/README.md: src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
+src/github.com/mozilla-services/heka/README.md:
 	cd src && \
 		mkdir -p github.com/mozilla-services && \
 		cd github.com/mozilla-services && \
 		git clone git@github.com:mozilla-services/heka.git
 
-bin/hekad: $(GOBIN) src/github.com/mozilla-services/heka/README.md
+bin/hekad: src/github.com/mozilla-services/heka/README.md $(GOBIN) src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
 	cd src && \
 		$(GOCMD) install github.com/mozilla-services/heka/hekad
 
@@ -85,5 +89,5 @@ src/github.com/mozilla-services/heka/hekad/plugin_loader.go: src/github.com/mozi
 
 pluginloader: src/github.com/mozilla-services/heka/hekad/plugin_loader.go
 
-rpms: pluginloader build moz-plugins
+rpms: pluginloader moz-plugins build
 	./make_rpms.sh
