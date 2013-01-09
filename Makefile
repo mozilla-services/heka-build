@@ -45,7 +45,7 @@ src/github.com/ugorji/go-msgpack:
 src/github.com/mozilla-services/heka/README.md:
 	mkdir -p src/github.com/mozilla-services
 	cd src/github.com/mozilla-services && \
-		git clone git@github.com:mozilla-services/heka.git
+		git clone https://github.com/mozilla-services/heka.git
 
 bin/hekad: src/github.com/mozilla-services/heka/README.md $(GOBIN) src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
 	cd src && \
@@ -56,7 +56,7 @@ hekad: bin/hekad
 src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
 	mkdir -p src/github.com/mozilla-services
 	cd src/github.com/mozilla-services && \
-		git clone git@github.com:mozilla-services/heka-mozsvc-plugins.git
+		git clone https://github.com/mozilla-services/heka-mozsvc-plugins.git
 
 src/github.com/crankycoder/g2s:
 	$(GOCMD) get github.com/crankycoder/g2s
@@ -91,3 +91,12 @@ pluginloader: src/github.com/mozilla-services/heka/hekad/plugin_loader.go
 
 rpms: pluginloader moz-plugins build
 	./make_rpms.sh
+
+dev: src/github.com/mozilla-services/heka/README.md
+	cd src/github.com/mozilla-services/heka && \
+	git config remote.origin.url git@github.com:mozilla-services/heka.git
+
+dev-moz-plugins: moz-plugins
+	cd src/github.com/mozilla-services/heka-mozsvc-plugins && \
+	git config remote.origin.url git@github.com:mozilla-services/heka-mozsvc-plugins.git
+
