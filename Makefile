@@ -22,11 +22,11 @@ clean: clean-env
 build/go:
 	mkdir build
 	cd build && \
-	hg clone -u 477b2e70b12d https://code.google.com/p/go
+		hg clone -u 477b2e70b12d https://code.google.com/p/go
 
 $(GOBIN): build/go
 	cd build/go/src && \
-	./all.bash
+		./all.bash
 	cp build/go/bin/go $(HERE)/bin/go
 
 src/github.com/bitly/go-simplejson:
@@ -40,13 +40,13 @@ src/github.com/ugorji/go-msgpack:
 
 src/github.com/mozilla-services/heka/README.md: src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
 	cd src && \
-	mkdir -p github.com/mozilla-services && \
-	cd github.com/mozilla-services && \
-	git clone git@github.com:mozilla-services/heka.git
+		mkdir -p github.com/mozilla-services && \
+		cd github.com/mozilla-services && \
+		git clone git@github.com:mozilla-services/heka.git
 
 bin/hekad: src/github.com/mozilla-services/heka/README.md
 	cd src && \
-	$(GOCMD) install github.com/mozilla-services/heka/hekad
+		$(GOCMD) install github.com/mozilla-services/heka/hekad
 
 hekad: bin/hekad
 
