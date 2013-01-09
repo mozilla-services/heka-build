@@ -42,13 +42,13 @@ src/github.com/mozilla-services/heka/README.md: src/github.com/bitly/go-simplejs
 	cd src && \
 	mkdir -p github.com/mozilla-services && \
 	cd github.com/mozilla-services && \
-	git clone git@github.com:mozilla-services/heka.git
+	git clone https://github.com/mozilla-services/heka.git
 	cd src && \
 	$(GOCMD) install github.com/mozilla-services/heka/hekad
 
 src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
 	cd src/github.com/mozilla-services && \
-	git clone git@github.com:mozilla-services/heka-mozsvc-plugins.git
+	git clone https://github.com/mozilla-services/heka-mozsvc-plugins.git
 
 moz-plugins: src/github.com/mozilla-services/heka-mozsvc-plugins/README.md
 
@@ -68,3 +68,11 @@ test: gomock gospec
 	$(GOCMD) test -i github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test github.com/mozilla-services/heka/message
+
+dev: src/github.com/mozilla-services/heka/README.md
+	cd src/github.com/mozilla-services/heka && \
+	git config remote.origin.url git@github.com:mozilla-services/heka.git
+
+dev-moz-plugins: moz-plugins
+	cd src/github.com/mozilla-services/heka-mozsvc-plugins && \
+	git config remote.origin.url git@github.com:mozilla-services/heka-mozsvc-plugins.git
