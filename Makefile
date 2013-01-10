@@ -97,7 +97,7 @@ rpms: pluginloader moz-plugins build
 	./make_pkgs.sh rpm
 
 debs: pluginloader moz-plugins build
-	./make-pkgs.sh deb
+	./make_pkgs.sh deb
 
 dev: heka-source
 	cd src/github.com/mozilla-services/heka && \
