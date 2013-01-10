@@ -6,8 +6,6 @@ GOBIN = $(HERE)/bin/go
 GOCMD = GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
 
-GO_BUILD_DIRS = bin/go build
-
 
 .PHONY: all build test clean-env clean gospec moz-plugins
 .SILENT: test
@@ -15,13 +13,17 @@ GO_BUILD_DIRS = bin/go build
 all: build
 
 clean-go:
-	rm -rf $(BUILD_DIRS)
+	rm -rf bin/go build
+
+clean-src:
+	rm -rf src/*
 
 clean-heka:
-	rm -fr src/*
-	rm bin/hekad
+	rm -f bin/hekad
 
-clean: clean-go clean-heka
+clean-all: clean-go clean-src clean-heka
+
+clean: clean-heka
 
 build/go:
 	mkdir build
