@@ -24,4 +24,6 @@ _testmain.go
 bin/go
 bin/hekad
 build/
+debs/
 etc/
+rpms/
