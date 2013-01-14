@@ -95,11 +95,11 @@ src/github.com/mozilla-services/heka/hekad/plugin_loader.go: heka-source
 
 pluginloader: src/github.com/mozilla-services/heka/hekad/plugin_loader.go
 
-rpms: pluginloader moz-plugins build
-	./make_pkgs.sh rpm
+rpms: moz-plugins build
+	./scripts/make_pkgs.sh rpm
 
-debs: pluginloader moz-plugins build
-	./make_pkgs.sh deb
+debs: moz-plugins build
+	./scripts/make_pkgs.sh deb
 
 dev: heka-source
 	cd src/github.com/mozilla-services/heka && \
