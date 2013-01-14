@@ -88,12 +88,8 @@ test: gomock gospec
 	$(GOCMD) test github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test github.com/mozilla-services/heka/message
 
-src/github.com/mozilla-services/heka/hekad/plugin_loader.go: heka-source
-	cd src/github.com/mozilla-services/heka/hekad && \
-		cp plugin_loader.go.in plugin_loader.go
-	rm -f bin/hekad
-
-pluginloader: src/github.com/mozilla-services/heka/hekad/plugin_loader.go
+pluginloader: heka-source
+	./scripts/setup_pluginloader.py
 
 rpms: moz-plugins build
 	./scripts/make_pkgs.sh rpm
