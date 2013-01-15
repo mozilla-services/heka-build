@@ -91,10 +91,10 @@ test: gomock gospec
 pluginloader: heka-source
 	./scripts/setup_pluginloader.py
 
-rpms: moz-plugins build
+rpms: moz-plugins pluginloader build
 	./scripts/make_pkgs.sh rpm
 
-debs: moz-plugins build
+debs: moz-plugins pluginloader build
 	./scripts/make_pkgs.sh deb
 
 dev: heka-source

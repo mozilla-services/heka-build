@@ -18,12 +18,15 @@ import (
 def main():
     scriptname = "setup_pluginloader.py"
     fpath = "etc/plugin_packages.json"
+    pkgs_key = "plugin_packages"
     if not os.path.exists(fpath):
         msg = "{0}: No '{1}' file, exiting.".format(scriptname, fpath)
         print(msg)
         sys.exit()
 
     with open(fpath) as pkgs_file:
+        msg = "Reading Heka plugin packages from '{0} key in '{1}' file."
+        print(msg.format(pkgs_key, fpath))
         pkgs_file_blob = pkgs_file.read()
         try:
             pkgs_data = json.loads(pkgs_file_blob)
@@ -32,13 +35,14 @@ def main():
             print("---> {0}".format(e))
             sys.exit(1)
 
-    packages = pkgs_data.get("plugin_packages", [])
+    packages = pkgs_data.get(pkgs_key, [])
     outfile_path = ("src/github.com/mozilla-services/heka/hekad/"
                     "plugin_loader.go")
     if os.path.exists(outfile_path):
         os.remove(outfile_path)
 
     imports = "\n".join(['\t_ "{0}"'.format(package) for package in packages])
+    print("Imports:\n{0}".format(imports))
     outfile_content = go_tmpl.format(imports)
 
     with open(outfile_path, "w") as outfile:
