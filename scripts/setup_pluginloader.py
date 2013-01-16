@@ -25,8 +25,6 @@ def main():
         sys.exit()
 
     with open(fpath) as pkgs_file:
-        msg = "Reading Heka plugin packages from '{0} key in '{1}' file."
-        print(msg.format(pkgs_key, fpath))
         pkgs_file_blob = pkgs_file.read()
         try:
             pkgs_data = json.loads(pkgs_file_blob)
@@ -41,8 +39,15 @@ def main():
     if os.path.exists(outfile_path):
         os.remove(outfile_path)
 
+    msg = ("Reading Heka plugin packages:\n   ('{0}' key from '{1}' file)")
+    print(msg.format(pkgs_key, fpath))
+    if packages:
+        for package in packages:
+            print("-> {0}".format(package))
+    else:
+        print("\t\tNone")
+
     imports = "\n".join(['\t_ "{0}"'.format(package) for package in packages])
-    print("Imports:\n{0}".format(imports))
     outfile_content = go_tmpl.format(imports)
 
     with open(outfile_path, "w") as outfile:
