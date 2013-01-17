@@ -6,7 +6,7 @@ changeset number.
 
 Example package file::
 
-    github.com/bitly/go-simplejson 477b2e70b12d
+    github.com/bitly/go-simplejson 1 477b2e70b12d
 
 Two fields are present in a single line:
 
@@ -50,6 +50,42 @@ def locate_commands():
     return command_hash
 
 
+def parse_package_file(package_lines):
+    """Parses the contents of a package file
+
+    Creates and returns a list of package data dicts::
+
+        {
+            "type": "hg",
+            "repo_url": "bitbucket.org/user/project",
+            "sub_url": "/sub/directory",
+            "checkout": False,
+            "fq_url": "ssh://hg@bitbucket.org/user/project/sub/directory",
+            "changeset": "477b2e70b12d"
+        }
+
+    changeset may be None to indicate the latest should always be
+    used.
+
+    """
+    parsed = []
+    for line in package_lines:
+        pkg = {}
+        parts = line.split(" ")
+        repo = parts[0]
+        checkout = pkg["checkout"] = bool(int(parts[0]))
+        if len(parts) < 3:
+            changeset = parts[2]
+        else:
+            changeset = None
+
+        # Determine if bitbucket/github and split urls
+        host, repo = repo.split("/", 1)
+        if host == "bitbucket.org":
+            pkg["type"] = "hg"
+
+
+
 def main():
     if len(sys.argv) < 2:
         print("No configuration file specified.")
@@ -68,4 +104,5 @@ def main():
 
     print(package_lines)
 
-# main()
+if __name__ == "__main__":
+    main()
