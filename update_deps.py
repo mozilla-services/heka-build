@@ -28,7 +28,26 @@ Example::
 """
 from __future__ import print_function
 import os
+import subprocess
 import sys
+
+
+def run_command(command, *args):
+    """Runs a command until completed and return error code and output"""
+    p = subprocess.Popen(command + " " + " ".join(args),
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    output, error = p.communicate()
+    return error, output
+
+
+def locate_commands():
+    """Locates system commands such as git/hg/svn/bzr"""
+    command_hash = {}
+    for cmd in ["git", "svn", "hg", "bzr"]:
+        wcmd = run_command("which %s" % cmd)[1]
+        if wcmd:
+            command_hash[cmd] = wcmd.strip()
+    return command_hash
 
 
 def main():
@@ -49,4 +68,4 @@ def main():
 
     print(package_lines)
 
-main()
+# main()
