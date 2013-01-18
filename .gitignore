@@ -26,4 +26,5 @@ bin/hekad
 build/
 debs/
 etc/
+log/
 rpms/
