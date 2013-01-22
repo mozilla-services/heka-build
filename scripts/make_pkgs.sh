@@ -10,12 +10,15 @@ if [ $1 != "rpm" -a $1 != "deb" ]; then
 	exit 1
 fi
 
-mkdir -p tmp_pkg_root/usr/bin
+ROOT=tmp_pkg_root
+mkdir -p $ROOT/usr/bin
+mkdir -p $ROOT/etc
 mkdir -p $1s
 VERSION=`./bin/hekad -version`
-cp bin/hekad tmp_pkg_root/usr/bin
-cd tmp_pkg_root
-fpm -s dir -t $1 -n "hekad" -v $VERSION --iteration ${ITERATION:-1} usr
+cp bin/hekad $ROOT/usr/bin
+cp sample/hekad.json $ROOT/etc/hekad.json.sample
+cd $ROOT
+fpm -s dir -t $1 -n "hekad" -v $VERSION --iteration ${ITERATION:-1} .
 mv hekad*$VERSION-$ITERATION*.$1 ../$1s
 cd ..
 rm -fr tmp_pkg_root
