@@ -88,6 +88,10 @@ test: gomock gospec
 	$(GOCMD) test github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test github.com/mozilla-services/heka/message
 
+test-all: test
+	$(GOCMD) test -i github.com/mozilla-services/heka-mozsvc-plugins
+	$(GOCMD) test github.com/mozilla-services/heka-mozsvc-plugins
+
 pluginloader: heka-source
 	./scripts/setup_pluginloader.py
 
