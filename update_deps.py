@@ -65,28 +65,40 @@ class GitPackage(Package):
         self.changeset = changeset
 
         if host == 'github.com':
+            self.prefix = ""
             parts = repo_path.split('/', 2)
             if len(parts) > 2:
                 user, project, sub_path = parts
             else:
                 user, project, sub_path = parts[0], parts[1], ''
             self.repo = '%s/%s/%s' % (host, user, project)
+            self.repo_clone = 'git@%s:%s/%s.git' % (host, user, project)
             self.sub_path = sub_path
         else:
             repo = '/'.join(host, repo_path)
             # Locate the base repo by the chunk that has the .git
             self.repo, self.sub_path = repo.split('.git')
+            self.repo_clone = "http://%s.git" % self.repo
 
         self.repo_path = os.path.join(self.base_dir, self.repo)
 
     def install(self):
+        exisiting_dir = True
         if not os.path.exists(self.repo_path):
-            run_command("mkdir -p %s" % self.repo_path)
-            os.chdir(self.repo_path.split('/')[:-1])
-            run_command("git clone %s" % self.repo)
+            path_to_repo = self.repo_path.rsplit("/", 1)[0]
+            run_command("mkdir -p %s" % path_to_repo)
+            os.chdir(path_to_repo)
+            print(run_command("git clone %s" % self.repo_clone)[1])
+            exisiting_dir = False
 
         # Ensure we have the right revision
         os.chdir(self.repo_path)
+
+        # Check to see there aren't local modifications
+        if exisiting_dir and run_command("git diff")[1]:
+            print("Warning: Local modifications detected in %s, "
+                "skipping update." % self.repo)
+            return
         run_command("git checkout -f %s" % self.changeset)
 
     def needs_update(self):
