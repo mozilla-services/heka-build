@@ -43,8 +43,8 @@ src/github.com/mozilla-services/heka/README.md:
 heka-source: src/github.com/mozilla-services/heka/README.md
 
 bin/hekad: heka-source $(GOBIN)
-	python update_deps.py package_deps.txt
-	cd src && \
+	@python update_deps.py package_deps.txt
+	@cd src && \
 		$(GOCMD) install github.com/mozilla-services/heka/hekad
 
 hekad: bin/hekad
