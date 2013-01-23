@@ -35,15 +35,6 @@ $(GOBIN): build/go
 		./all.bash
 	cp build/go/bin/go $(HERE)/bin/go
 
-src/github.com/bitly/go-simplejson:
-	$(GOCMD) get github.com/bitly/go-simplejson
-
-src/github.com/rafrombrc/go-notify:
-	$(GOCMD) get github.com/rafrombrc/go-notify
-
-src/github.com/ugorji/go-msgpack:
-	$(GOCMD) get github.com/ugorji/go-msgpack
-
 src/github.com/mozilla-services/heka/README.md:
 	mkdir -p src/github.com/mozilla-services
 	cd src/github.com/mozilla-services && \
@@ -51,7 +42,8 @@ src/github.com/mozilla-services/heka/README.md:
 
 heka-source: src/github.com/mozilla-services/heka/README.md
 
-bin/hekad: heka-source $(GOBIN) src/github.com/bitly/go-simplejson src/github.com/rafrombrc/go-notify src/github.com/ugorji/go-msgpack
+bin/hekad: heka-source $(GOBIN)
+	python update_deps.py package_deps.txt
 	cd src && \
 		$(GOCMD) install github.com/mozilla-services/heka/hekad
 
