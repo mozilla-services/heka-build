@@ -28,7 +28,7 @@ clean: clean-heka
 build/go:
 	mkdir build
 	cd build && \
-		hg clone -u 477b2e70b12d https://code.google.com/p/go
+		hg clone -u 885321ad3873 https://code.google.com/p/go
 
 $(GOBIN): build/go
 	cd build/go/src && \
