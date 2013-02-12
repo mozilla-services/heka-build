@@ -1,5 +1,5 @@
 github.com/bitly/go-simplejson master
 github.com/rafrombrc/go-notify master
 github.com/ugorji/go-msgpack master
-code.google.com/p/go-uuid master
-code.google.com/p/goprotobuf master
+code.google.com/p/go-uuid.hg default
+code.google.com/p/goprotobuf.hg default
