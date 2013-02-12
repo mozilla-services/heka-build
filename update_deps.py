@@ -72,7 +72,7 @@ class GitPackage(Package):
             else:
                 user, project, sub_path = parts[0], parts[1], ''
             self.repo = '%s/%s/%s' % (host, user, project)
-            self.repo_clone = 'git@%s:%s/%s.git' % (host, user, project)
+            self.repo_clone = 'git://%s/%s/%s.git' % (host, user, project)
             self.sub_path = sub_path
         else:
             repo = '/'.join(host, repo_path)
