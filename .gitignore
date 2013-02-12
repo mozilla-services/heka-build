@@ -21,10 +21,10 @@ _testmain.go
 
 *.exe
 
-bin/go
-bin/hekad
+bin/
 build/
 debs/
 etc/
 log/
 rpms/
+src/
