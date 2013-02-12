@@ -75,7 +75,7 @@ class GitPackage(Package):
             self.repo_clone = 'git://%s/%s/%s.git' % (host, user, project)
             self.sub_path = sub_path
         else:
-            repo = '/'.join(host, repo_path)
+            repo = '/'.join((host, repo_path))
             # Locate the base repo by the chunk that has the .git
             self.repo, self.sub_path = repo.split('.git')
             self.repo_clone = "http://%s.git" % self.repo
@@ -88,7 +88,7 @@ class GitPackage(Package):
             path_to_repo = self.repo_path.rsplit("/", 1)[0]
             run_command("mkdir -p %s" % path_to_repo)
             os.chdir(path_to_repo)
-            print(run_command("git clone %s" % self.repo_clone)[1])
+            print(''.join(run_command("git clone %s" % self.repo_clone)))
             exisiting_dir = False
 
         # Ensure we have the right revision
@@ -141,7 +141,7 @@ class MercurialPackage(Package):
             self.repo = '%s/%s/%s' % (host, user, project)
             self.sub_path = sub_path
         else:
-            repo = '/'.join(host, repo_path)
+            repo = '/'.join((host, repo_path))
             # Locate the base repo by the chunk that has the .hg
             self.repo, self.sub_path = repo.split('.hg')
 
@@ -149,9 +149,10 @@ class MercurialPackage(Package):
 
     def install(self):
         if not os.path.exists(self.repo_path):
-            run_command("mkdir -p %s" % self.repo_path)
-            os.chdir(self.repo_path.split('/')[:-1])
-            run_command("hg clone %s" % self.repo)
+            path_to_repo = self.repo_path.rsplit("/", 1)[0]
+            run_command("mkdir -p %s" % path_to_repo)
+            os.chdir(path_to_repo)
+            print(''.join(run_command("hg clone http://%s" % self.repo)))
 
         # TODO: Make this work
         # Since we need a -r REV for a revision vs. branch with
