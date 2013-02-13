@@ -95,9 +95,13 @@ debs: moz-plugins pluginloader build
 
 dev: heka-source
 	cd src/github.com/mozilla-services/heka && \
-	git config remote.origin.url git@github.com:mozilla-services/heka.git
-
-dev-moz-plugins: moz-plugins
-	cd src/github.com/mozilla-services/heka-mozsvc-plugins && \
-	git config remote.origin.url git@github.com:mozilla-services/heka-mozsvc-plugins.git
+	git config remote.origin.url git@github.com:mozilla-services/heka.git && \
+	git checkout dev; \
+	cd ../../../..; \
+	if [ -e src/github.com/mozilla-services/heka-mozsvc-plugins ]; \
+	then \
+	    cd src/github.com/mozilla-services/heka-mozsvc-plugins && \
+	    git config remote.origin.url git@github.com:mozilla-services/heka-mozsvc-plugins.git && \
+	    git checkout dev ;\
+	fi
 
