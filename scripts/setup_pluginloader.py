@@ -20,8 +20,7 @@ def main():
     fpath = "etc/plugin_packages.json"
     pkgs_key = "plugin_packages"
     if not os.path.exists(fpath):
-        msg = "{0}: No '{1}' file, exiting.".format(scriptname, fpath)
-        print(msg)
+        print("No external plugins loaded for the build.")
         sys.exit()
 
     with open(fpath) as pkgs_file:
