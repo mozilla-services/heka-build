@@ -62,6 +62,7 @@ src/github.com/crankycoder/g2s:
 g2s: src/github.com/crankycoder/g2s
 
 moz-plugins: $(GOBIN) g2s moz-plugins-source
+	./scripts/register_mozsvc_plugins.py
 
 build: hekad
 
@@ -87,10 +88,10 @@ test-all: test
 pluginloader: heka-source
 	./scripts/setup_pluginloader.py
 
-rpms: moz-plugins pluginloader build
+rpms: moz-plugins build
 	./scripts/make_pkgs.sh rpm
 
-debs: moz-plugins pluginloader build
+debs: moz-plugins build
 	./scripts/make_pkgs.sh deb
 
 dev: heka-source
@@ -102,6 +103,17 @@ dev: heka-source
 	then \
 	    cd src/github.com/mozilla-services/heka-mozsvc-plugins && \
 	    git config remote.origin.url git@github.com:mozilla-services/heka-mozsvc-plugins.git && \
-	    git checkout dev ;\
+	    git checkout dev; \
 	fi
 
+undev: heka-source
+	cd src/github.com/mozilla-services/heka && \
+	git config remote.origin.url https://github.com/mozilla-services/heka.git && \
+	git checkout master; \
+	cd ../../../..; \
+	if [ -e src/github.com/mozilla-services/heka-mozsvc-plugins ]; \
+	then \
+	    cd src/github.com/mozilla-services/heka-mozsvc-plugins && \
+	    git config remote.origin.url https://github.com/mozilla-services/heka-mozsvc-plugins.git && \
+	    git checkout master; \
+	fi
