@@ -1,4 +1,5 @@
 github.com/bitly/go-simplejson master
+github.com/kisielk/whisper-go master
 github.com/rafrombrc/go-notify master
 github.com/ugorji/go-msgpack master
 code.google.com/p/go-uuid.hg default
