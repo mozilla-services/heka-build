@@ -1,0 +1,37 @@
+diff -r -u lua-5.1.1/src/ldebug.c lua-5.1.1-hookcount/src/ldebug.c
+--- lua-5.1.1/src/ldebug.c    2005-12-22 17:19:56.000000000 +0100
++++ lua-5.1.1-hookcount/src/ldebug.c    2006-09-10 17:55: 05.000000000 +0200
+@@ -80,6 +80,10 @@
+   return L->basehookcount;
+ }
+ 
++LUA_API int lua_gethookcountremaining (lua_State *L) {
++  return L->hookcount;
++}
++
+ 
+ LUA_API int lua_getstack (lua_State *L, int level, lua_Debug *ar) {
+   int status;
+diff -r -u lua-5.1.1/src/lua.h lua-5.1.1-hookcount/src/lua.h
+--- lua-5.1.1/src/lua.h    2006-06-02 17:34:00.000000000 +0200
++++ lua-5.1.1-hookcount/src/lua.h    2006-09-10 17:55:05.000000000 +0200
+@@ -338,6 +338,7 @@
+ LUA_API lua_Hook lua_gethook (lua_State *L);
+ LUA_API int lua_gethookmask (lua_State *L);
+ LUA_API int lua_gethookcount (lua_State *L);
++LUA_API int lua_gethookcountremaining (lua_State *L);
+ 
+ 
+ struct lua_Debug {
+diff -r -u lua-5.1.1/src/Makefile lua-5.1.1-hookcount/src/Makefile
+--- lua-5_1_1/src/Makefile    2012-02-13 12:41:22.000000000 -0800
++++ lua-5.1.1-hookcount/src/Makefile    2013-02-27 11:48:53.764345692 -0800
+@@ -8,7 +8,7 @@
+ PLAT= none
+ 
+ CC= gcc
+-CFLAGS= -O2 -Wall $(MYCFLAGS)
++CFLAGS= -O2 -Wall -fPIC $(MYCFLAGS)
+ AR= ar rcu
+ RANLIB= ranlib
+ RM= rm -f
