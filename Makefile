@@ -3,7 +3,7 @@ DEPS =
 HERE = $(shell pwd)
 BIN = $(HERE)/bin
 GOBIN = $(HERE)/bin/go
-GOCMD = GOPATH=$(HERE) $(GOBIN)
+GOCMD = LD_LIBRARY_PATH=${BIN} DYLD_LIBRARY_PATH=${BIN} GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
 
 ifeq ($(MAKECMDGOALS),test-bench)
@@ -22,7 +22,7 @@ clean-src:
 	rm -rf src/*
 
 clean-heka:
-	rm -f bin/hekad
+	rm -f bin/hekad bin/libsandbox.so
 
 clean-all: clean-go clean-src clean-heka
 
@@ -38,6 +38,10 @@ $(GOBIN): build/go
 		./all.bash
 	cp build/go/bin/go $(HERE)/bin/go
 
+sandbox:
+	mkdir -p release
+	cd release && cmake .. && make
+
 src/github.com/mozilla-services/heka/README.md:
 	mkdir -p src/github.com/mozilla-services
 	cd src/github.com/mozilla-services && \
@@ -48,9 +52,9 @@ heka-source: src/github.com/mozilla-services/heka/README.md
 bin/hekad: pluginloader heka-source $(GOBIN)
 	@python update_deps.py package_deps.txt
 	@cd src && \
-		$(GOCMD) install github.com/mozilla-services/heka/hekad
+		$(GOCMD) install -ldflags="-r ./" github.com/mozilla-services/heka/hekad
 
-hekad: bin/hekad
+hekad: sandbox bin/hekad
 
 src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
 	mkdir -p src/github.com/mozilla-services
