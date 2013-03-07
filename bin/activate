@@ -29,14 +29,6 @@ deactivate () {
         unset _OLD_GOENV_PS1
     fi
 
-    if [ -n "$_OLD_LD_LIBRARY_PATH" ] ; then
-        LD_LIBRARY_PATH="$_OLD_LD_LIBRARY_PATH"
-        export LD_LIBRARY_PATH
-        unset _OLD_LD_LIBRARY_PATH
-    else
-        unset LD_LIBRARY_PATH
-    fi
-
     if [ ! "$1" = "nondestructive" ] ; then
     # Self destruct!
         unset -f deactivate
@@ -72,14 +64,6 @@ if [ -z "$GOENV_DISABLE_PROMPT" ] ; then
     fi
     export PS1
 fi
-
-if [ -n "$LD_LIBRARY_PATH" ] ; then
-    _OLD_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-    LD_LIBRARY_PATH="$GOPATH/bin:$LD_LIBRARY_PATH"
-else
-    LD_LIBRARY_PATH="$GOPATH/bin"
-fi
-export LD_LIBRARY_PATH
 
 # This should detect bash and zsh, which have a hash command that must
 # be called to get it to forget past commands.  Without forgetting
