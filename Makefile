@@ -6,6 +6,9 @@ GOBIN = $(HERE)/bin/go
 GOCMD = LD_LIBRARY_PATH=${BIN} DYLD_LIBRARY_PATH=${BIN} GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
 
+ifeq ($(MAKECMDGOALS),test-bench)
+	BENCH = -bench .
+endif
 
 .PHONY: all build test clean-env clean gospec moz-plugins
 .SILENT: test
@@ -82,9 +85,11 @@ gospec: src/github.com/rafrombrc/gospec/src/gospec
 
 test: gomock gospec
 	$(GOCMD) test -i github.com/mozilla-services/heka/pipeline
-	$(GOCMD) test github.com/mozilla-services/heka/pipeline
-	$(GOCMD) test github.com/mozilla-services/heka/message
-	$(GOCMD) test github.com/mozilla-services/heka/sandbox/lua
+	$(GOCMD) test $(BENCH) github.com/mozilla-services/heka/pipeline
+	$(GOCMD) test $(BENCH) github.com/mozilla-services/heka/message
+	$(GOCMD) test $(BENCH) github.com/mozilla-services/heka/sandbox/lua
+
+test-bench: test
 
 test-all: test
 	$(GOCMD) test -i github.com/mozilla-services/heka-mozsvc-plugins
