@@ -38,7 +38,7 @@ $(GOBIN): build/go
 		./all.bash
 	cp build/go/bin/go $(HERE)/bin/go
 
-sandbox:
+sandbox: heka-source
 	mkdir -p release
 	cd release && cmake .. && make
 
