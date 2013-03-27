@@ -37,6 +37,14 @@ deactivate () {
         unset LD_LIBRARY_PATH
     fi
 
+    if [ -n "$_OLD_DYLD_LIBRARY_PATH" ] ; then
+        DYLD_LIBRARY_PATH="$_OLD_DYLD_LIBRARY_PATH"
+        export DYLD_LIBRARY_PATH
+        unset _OLD_DYLD_LIBRARY_PATH
+    else
+        unset DYLD_LIBRARY_PATH
+    fi
+
     if [ ! "$1" = "nondestructive" ] ; then
     # Self destruct!
         unset -f deactivate
@@ -72,6 +80,14 @@ if [ -z "$GOENV_DISABLE_PROMPT" ] ; then
     fi
     export PS1
 fi
+
+if [ -n "$DYLD_LIBRARY_PATH" ] ; then
+    _OLD_DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH"
+    DYLD_LIBRARY_PATH="$GOPATH/bin:$DYLD_LIBRARY_PATH"
+else
+    DYLD_LIBRARY_PATH="$GOPATH/bin"
+fi
+export DYLD_LIBRARY_PATH
 
 if [ -n "$LD_LIBRARY_PATH" ] ; then
     _OLD_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
