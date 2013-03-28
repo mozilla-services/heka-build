@@ -76,7 +76,10 @@ build: hekad
 src/code.google.com/p/gomock/gomock:
 	$(GOCMD) get code.google.com/p/gomock/gomock
 
-gomock: src/code.google.com/p/gomock/gomock
+bin/mockgen:
+	$(GOCMD) install code.google.com/p/gomock/mockgen
+
+gomock: src/code.google.com/p/gomock/gomock bin/mockgen
 
 src/github.com/rafrombrc/gospec/src/gospec:
 	$(GOCMD) get github.com/rafrombrc/gospec/src/gospec
