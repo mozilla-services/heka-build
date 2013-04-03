@@ -29,9 +29,28 @@ clean-all: clean-go clean-src clean-heka
 clean: clean-heka
 
 $(HERE)/heka-docs:
-	git clone https://github.com/mozilla-services/heka-docs.git
+	git clone https://github.com/mozilla-services/heka-docs.git && \
+	cd heka-docs && \
+	git submodule update --init --recursive
 
-docs: $(HERE)/heka-docs
+$(HERE)/virtualenv:
+	curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.9.1.tar.gz
+	tar xzvf virtualenv-1.9.1.tar.gz
+	mv virtualenv-1.9.1 virtualenv
+
+$(HERE)/pythonVE: $(HERE)/virtualenv
+	cd virtualenv && \
+	python virtualenv.py ../pythonVE
+
+$(HERE)/pythonVE/bin/sphinx-build: $(HERE)/pythonVE
+	pythonVE/bin/pip install Sphinx
+
+docs: $(HERE)/heka-docs $(HERE)/pythonVE/bin/sphinx-build bin/hekad
+	cd heka-docs && \
+		make html SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build
+	cd src/github.com/mozilla-services/heka/docs && \
+		make html SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build && \
+		make man SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build
 
 build/go:
 	mkdir build
@@ -50,7 +69,9 @@ sandbox: heka-source
 src/github.com/mozilla-services/heka/README.md:
 	mkdir -p src/github.com/mozilla-services
 	cd src/github.com/mozilla-services && \
-		git clone https://github.com/mozilla-services/heka.git
+		git clone https://github.com/mozilla-services/heka.git && \
+		cd heka && \
+		git submodule update --init --recursive
 
 heka-source: src/github.com/mozilla-services/heka/README.md
 
@@ -106,10 +127,10 @@ test-all: test
 pluginloader: heka-source
 	./scripts/setup_pluginloader.py
 
-rpms: moz-plugins build
+rpms: moz-plugins build docs
 	./scripts/make_pkgs.sh rpm
 
-debs: moz-plugins build
+debs: moz-plugins build docs
 	./scripts/make_pkgs.sh deb
 
 dev: heka-source
