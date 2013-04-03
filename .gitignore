@@ -28,3 +28,7 @@ etc/
 log/
 rpms/
 src/
+release/
+pythonVE/
+virtualenv/
+
