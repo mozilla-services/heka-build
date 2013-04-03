@@ -28,6 +28,11 @@ clean-all: clean-go clean-src clean-heka
 
 clean: clean-heka
 
+$(HERE)/heka-docs:
+	git clone https://github.com/mozilla-services/heka-docs.git
+
+docs: $(HERE)/heka-docs
+
 build/go:
 	mkdir build
 	cd build && \
@@ -118,6 +123,12 @@ dev: heka-source
 	    git config remote.origin.url git@github.com:mozilla-services/heka-mozsvc-plugins.git && \
 	    git checkout dev; \
 	fi
+	if [ -e heka-docs ]; \
+	then \
+		cd heka-docs && \
+		git config remote.origin.url git@github.com:mozilla-services/heka-docs.git && \
+		git checkout dev; \
+	fi
 
 undev: heka-source
 	cd src/github.com/mozilla-services/heka && \
@@ -129,4 +140,10 @@ undev: heka-source
 	    cd src/github.com/mozilla-services/heka-mozsvc-plugins && \
 	    git config remote.origin.url https://github.com/mozilla-services/heka-mozsvc-plugins.git && \
 	    git checkout master; \
+	fi
+	if [ -e heka-docs ]; \
+	then \
+		cd heka-docs && \
+		git config remote.origin.url https://github.com/mozilla-services/heka-docs.git && \
+		git checkout master; \
 	fi
