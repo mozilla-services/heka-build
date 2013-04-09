@@ -78,8 +78,7 @@ heka-source: src/github.com/mozilla-services/heka/README.md
 
 bin/hekad: pluginloader heka-source $(GOBIN)
 	@GOPATH=$GOPATH python update_deps.py package_deps.txt
-	@cp $(SANDBOX) $(SANDBOX).bak
-	@sed -e "s,HEKABUILDPATH,$(BIN),g" -i "" $(SANDBOX)
+	@perl -pi.bak -e "s,HEKABUILDPATH,$(BIN),g" $(SANDBOX)
 	@cd src && \
 		$(GOCMD) install -ldflags="-r ./" github.com/mozilla-services/heka/hekad
 	@mv $(SANDBOX).bak $(SANDBOX)
