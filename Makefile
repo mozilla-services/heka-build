@@ -115,7 +115,7 @@ src/github.com/rafrombrc/gospec/src/gospec:
 
 gospec: src/github.com/rafrombrc/gospec/src/gospec
 
-test: gomock gospec
+test: gomock gospec hekad
 	$(GOCMD) test -i github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test $(BENCH) github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test $(BENCH) github.com/mozilla-services/heka/message
