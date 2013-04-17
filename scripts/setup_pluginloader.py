@@ -33,7 +33,7 @@ def main():
             sys.exit(1)
 
     packages = pkgs_data.get(pkgs_key, [])
-    outfile_path = ("src/github.com/mozilla-services/heka/hekad/"
+    outfile_path = ("src/github.com/mozilla-services/heka/cmd/hekad/"
                     "plugin_loader.go")
     if os.path.exists(outfile_path):
         os.remove(outfile_path)
