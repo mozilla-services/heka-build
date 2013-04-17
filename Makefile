@@ -3,6 +3,7 @@ DEPS =
 HERE = $(shell pwd)
 BIN = $(HERE)/bin
 GOBIN = $(HERE)/bin/go
+HGBIN = $(HERE)/pythonVE/bin/hg
 GOCMD = LD_LIBRARY_PATH=${BIN} DYLD_LIBRARY_PATH=${BIN} GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
 SANDBOX = $(HERE)/src/github.com/mozilla-services/heka/sandbox/lua/lua_sandbox.go
@@ -43,6 +44,9 @@ $(HERE)/pythonVE: $(HERE)/virtualenv
 	cd virtualenv && \
 	python virtualenv.py ../pythonVE
 
+$(HGBIN): $(HERE)/pythonVE
+	$(HERE)/pythonVE/bin/pip install -U Mercurial
+
 $(HERE)/pythonVE/bin/sphinx-build: $(HERE)/pythonVE
 	pythonVE/bin/pip install Sphinx
 
@@ -53,10 +57,10 @@ docs: $(HERE)/heka-docs $(HERE)/pythonVE/bin/sphinx-build bin/hekad
 		make html SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build && \
 		make man SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build
 
-build/go:
+build/go: $(HGBIN)
 	mkdir build
 	cd build && \
-		hg clone -u 0a4f1eb9372f https://code.google.com/p/go
+		$(HGBIN) clone -u 0a4f1eb9372f https://code.google.com/p/go
 
 $(GOBIN): build/go
 	cd build/go/src && \
