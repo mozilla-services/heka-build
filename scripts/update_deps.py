@@ -230,7 +230,8 @@ def main():
         package_lines = [x.strip() for x in f.readlines() if x.strip()]
 
     here_dir = os.path.dirname(os.path.abspath(__file__))
-    src_dir = os.path.join(here_dir, 'src')
+    parent_dir = os.path.dirname(here_dir)
+    src_dir = os.path.join(parent_dir, 'src')
     packages = parse_package_file(package_lines, src_dir)
 
     # Last sanity check to see that we have what we need
