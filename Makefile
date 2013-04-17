@@ -58,7 +58,7 @@ docs: $(HERE)/heka-docs $(HERE)/pythonVE/bin/sphinx-build bin/hekad
 		make man SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build
 
 build/go: $(HGBIN)
-	mkdir build
+	mkdir -p build
 	cd build && \
 		$(HGBIN) clone -u 0a4f1eb9372f https://code.google.com/p/go
 
