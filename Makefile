@@ -77,13 +77,18 @@ src/github.com/mozilla-services/heka/README.md:
 heka-source: src/github.com/mozilla-services/heka/README.md
 
 bin/hekad: pluginloader heka-source $(GOBIN)
-	@GOPATH=$GOPATH python update_deps.py package_deps.txt
+	@GOPATH=$GOPATH python scripts/update_deps.py package_deps.txt
 	@perl -pi.bak -e "s,HEKABUILDPATH,$(BIN),g" $(SANDBOX)
 	@cd src && \
-		$(GOCMD) install -ldflags="-r ./" github.com/mozilla-services/heka/hekad
+		$(GOCMD) install -ldflags="-r ./" github.com/mozilla-services/heka/cmd/hekad
 	@mv $(SANDBOX).bak $(SANDBOX)
 
 hekad: sandbox bin/hekad
+
+bin/flood:
+	$(GOCMD) install github.com/mozilla-services/heka/cmd/flood
+
+flood: bin/flood
 
 src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
 	mkdir -p src/github.com/mozilla-services
