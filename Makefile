@@ -44,9 +44,6 @@ $(HERE)/pythonVE: $(HERE)/virtualenv
 	cd virtualenv && \
 	python virtualenv.py ../pythonVE
 
-$(HGBIN): $(HERE)/pythonVE
-	$(HERE)/pythonVE/bin/pip install -U Mercurial
-
 $(HERE)/pythonVE/bin/sphinx-build: $(HERE)/pythonVE
 	pythonVE/bin/pip install Sphinx
 
@@ -57,7 +54,11 @@ docs: $(HERE)/heka-docs $(HERE)/pythonVE/bin/sphinx-build bin/hekad
 		make html SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build && \
 		make man SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build
 
-build/go: $(HGBIN)
+build/go:
+	if [ ! -f $(HGBIN) ]; \
+	then \
+		$(HERE)/pythonVE/bin/pip install -U Mercurial; \
+	fi
 	mkdir -p build
 	cd build && \
 		$(HGBIN) clone -u 0a4f1eb9372f https://code.google.com/p/go
@@ -80,7 +81,7 @@ src/github.com/mozilla-services/heka/README.md:
 
 heka-source: src/github.com/mozilla-services/heka/README.md
 
-bin/hekad: pluginloader heka-source $(GOBIN)
+bin/hekad: pluginloader heka-source $(HERE)/pythonVE $(GOBIN)
 	@GOPATH=$GOPATH python scripts/update_deps.py package_deps.txt
 	@perl -pi.bak -e "s,HEKABUILDPATH,$(BIN),g" $(SANDBOX)
 	@cd src && \
