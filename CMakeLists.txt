@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-project(heka-build)
+project(heka-build C)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Heka")
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 2)
