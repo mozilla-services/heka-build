@@ -17,4 +17,3 @@ if(CMAKE_HOST_UNIX)
 endif(CMAKE_HOST_UNIX)
 
 include_directories(${CMAKE_BINARY_DIR}/external/include)
-add_subdirectory(src/github.com/mozilla-services/heka/sandbox)

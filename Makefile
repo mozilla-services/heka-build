@@ -4,7 +4,7 @@ HERE = $(shell pwd)
 BIN = $(HERE)/bin
 GOBIN = $(HERE)/bin/go
 HGBIN = $(HERE)/pythonVE/bin/hg
-GOCMD = LD_LIBRARY_PATH=${BIN} DYLD_LIBRARY_PATH=${BIN} GOPATH=$(HERE) $(GOBIN)
+GOCMD = GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
 SANDBOX = $(HERE)/src/github.com/mozilla-services/heka/sandbox/lua/lua_sandbox.go
 
@@ -24,7 +24,7 @@ clean-src:
 	rm -rf src/*
 
 clean-heka:
-	rm -f bin/hekad bin/libsandbox.so
+	rm -f bin/hekad
 
 clean-all: clean-go clean-src clean-heka
 
@@ -83,9 +83,9 @@ heka-source: src/github.com/mozilla-services/heka/README.md
 
 bin/hekad: pluginloader heka-source $(HERE)/pythonVE $(GOBIN)
 	@GOPATH=$GOPATH python scripts/update_deps.py package_deps.txt
-	@perl -pi.bak -e "s,HEKABUILDPATH,$(BIN),g" $(SANDBOX)
+	@perl -pi.bak -e "s,HEKABUILDPATH,$(HERE),g" $(SANDBOX)
 	@cd src && \
-		$(GOCMD) install -ldflags="-r ./" github.com/mozilla-services/heka/cmd/hekad
+		$(GOCMD) install github.com/mozilla-services/heka/cmd/hekad
 	@mv $(SANDBOX).bak $(SANDBOX)
 
 hekad: sandbox bin/hekad
