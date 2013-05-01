@@ -64,7 +64,7 @@ build/go:
 		$(HGBIN) clone -u 0a4f1eb9372f https://code.google.com/p/go
 
 $(GOBIN): build/go
-	PATH="$(BIN):$(PATH)" cd build/go/src && \
+	PATH="$(BIN):$(HERE)/pythonVE/bin:$(PATH)" cd build/go/src && \
 		./all.bash
 	cp build/go/bin/go $(HERE)/bin/go
 
