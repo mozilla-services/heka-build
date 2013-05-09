@@ -84,6 +84,10 @@ bin/hekad: pluginloader heka-source $(HERE)/pythonVE $(GOBIN)
 	@GOPATH=$GOPATH python scripts/update_deps.py package_deps.txt
 	@cd src && \
 		$(GOCMD) install github.com/mozilla-services/heka/cmd/hekad
+	@perl -pi.bak -e "s,HEKABUILDPATH,$(HERE),g" $(SANDBOX)
+	@cd src && \
+		$(GOCMD) install github.com/mozilla-services/heka/cmd/hekad
+	@mv $(SANDBOX).bak $(SANDBOX)
 
 hekad: sandbox bin/hekad
 
