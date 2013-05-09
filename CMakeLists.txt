@@ -11,6 +11,7 @@ set(CPACK_PACKAGE_VERSION_MINOR 2)
 set(CPACK_PACKAGE_VERSION_PATCH 0)
 set(CPACK_PACKAGE_VENDOR "Mozilla Services")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
+include(CTest)
 
 if (MINGW)
     set(ADDRESS_MODEL 64)
@@ -39,6 +40,7 @@ if (MINGW)
     COMMAND ${GO_EXE} get github.com/bitly/go-simplejson
     COMMAND ${GO_EXE} get github.com/rafrombrc/go-notify
     COMMAND ${GO_EXE} get github.com/bbangert/toml
+    COMMAND ${GO_EXE} install code.google.com/p/gomock/mockgen
     DEPENDS ${HEKA_README})
 
     add_custom_target(flood ALL ${GO_EXE} install github.com/mozilla-services/heka/cmd/flood DEPENDS gopackages)
@@ -52,6 +54,8 @@ if (MINGW)
     install(FILES "${HEKA_PATH}/sandbox/lua/testsupport/hekabench_cbuf_counter.lua" DESTINATION bin)
     install(PROGRAMS ${CMAKE_SOURCE_DIR}/LICENSE.txt DESTINATION .)
     set(PACKAGE_NAME "${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}_${CPACK_PACKAGE_VERSION_MINOR}_${CPACK_PACKAGE_VERSION_PATCH}_w${ADDRESS_MODEL}")
+    add_test(message ${GO_EXE} test github.com/mozilla-services/heka/message)
+    add_test(sandbox ${GO_EXE} test github.com/mozilla-services/heka/sandbox)
 else()
     set(PACKAGE_NAME "${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}_${CPACK_PACKAGE_VERSION_MINOR}_${CPACK_PACKAGE_VERSION_PATCH}")
     set(CPACK_GENERATOR "TGZ")
@@ -72,6 +76,9 @@ configure_file("${LUA_SANDBOX_GO}.in" ${LUA_SANDBOX_GO} @ONLY)
 if (MINGW)
     add_custom_target(hekad ALL ${GO_EXE} install github.com/mozilla-services/heka/cmd/hekad)
     add_dependencies(hekad gopackages lua-5_1_5)
+    # compile the test and place it in the directory with the liblua.dll so it can be run
+    add_custom_target(pipeline.test ALL COMMAND ${GO_EXE} test -c github.com/mozilla-services/heka/pipeline DEPENDS hekad WORKING_DIRECTORY ${LUA_LIB_PATH})
+    # todo: prevent test from hanging add_test(NAME pipeline WORKING_DIRECTORY ${LUA_LIB_PATH} COMMAND pipeline.test)
     install(PROGRAMS ${CMAKE_SOURCE_DIR}/bin/hekad.exe DESTINATION bin)
     install(FILES ${LUA_LIB_PATH}/liblua.dll DESTINATION bin)
 endif()
