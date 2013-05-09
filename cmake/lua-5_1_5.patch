@@ -4,12 +4,12 @@ diff -r -u lua-5.1.1/src/ldebug.c lua-5.1.1-hookcount/src/ldebug.c
 @@ -80,6 +80,10 @@
    return L->basehookcount;
  }
- 
+
 +LUA_API int lua_gethookcountremaining (lua_State *L) {
 +  return L->hookcount;
 +}
 +
- 
+
  LUA_API int lua_getstack (lua_State *L, int level, lua_Debug *ar) {
    int status;
 diff -r -u lua-5.1.1/src/lua.h lua-5.1.1-hookcount/src/lua.h
@@ -20,18 +20,70 @@ diff -r -u lua-5.1.1/src/lua.h lua-5.1.1-hookcount/src/lua.h
  LUA_API int lua_gethookmask (lua_State *L);
  LUA_API int lua_gethookcount (lua_State *L);
 +LUA_API int lua_gethookcountremaining (lua_State *L);
- 
- 
+
+
  struct lua_Debug {
-diff -r -u lua-5.1.1/src/Makefile lua-5.1.1-hookcount/src/Makefile
---- lua-5_1_1/src/Makefile    2012-02-13 12:41:22.000000000 -0800
-+++ lua-5.1.1-hookcount/src/Makefile    2013-02-27 11:48:53.764345692 -0800
-@@ -8,7 +8,7 @@
- PLAT= none
- 
- CC= gcc
--CFLAGS= -O2 -Wall $(MYCFLAGS)
-+CFLAGS= -O2 -Wall -fPIC $(MYCFLAGS)
- AR= ar rcu
- RANLIB= ranlib
- RM= rm -f
+diff -r -u -N lua-5.1.5/CMakeLists.txt lua-5.1.5p/CMakeLists.txt
+--- lua-5.1.5/CMakeLists.txt	Wed Dec 31 16:00:00 1969
++++ lua-5.1.5p/CMakeLists.txt	Wed May  8 14:47:43 2013
+@@ -0,0 +1,60 @@
++# This Source Code Form is subject to the terms of the Mozilla Public
++# License, v. 2.0. If a copy of the MPL was not distributed with this
++# file, You can obtain one at http://mozilla.org/MPL/2.0/.
++
++cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
++project(lua C)
++set(CMAKE_C_FLAGS "-O2 -Wall")
++
++set(LUA_SOURCE
++src/lapi.c
++src/lauxlib.c
++src/lbaselib.c
++src/lcode.c
++src/ldblib.c
++src/ldebug.c
++src/ldo.c
++src/ldump.c
++src/lfunc.c
++src/lgc.c
++src/linit.c
++src/liolib.c
++src/llex.c
++src/lmathlib.c
++src/lmem.c
++src/loadlib.c
++src/lobject.c
++src/lopcodes.c
++src/loslib.c
++src/lparser.c
++src/lstate.c
++src/lstring.c
++src/lstrlib.c
++src/ltable.c
++src/ltablib.c
++src/ltm.c
++src/lundump.c
++src/lvm.c
++src/lzio.c
++)
++
++if (MINGW)
++    add_library(lua SHARED ${LUA_SOURCE})
++    set_target_properties(lua PROPERTIES LINK_FLAGS -s)
++    if (ADDRESS_MODEL EQUAL 32)
++        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
++        set_target_properties(lua PROPERTIES LINK_FLAGS "-s -m32")
++    endif()
++    add_definitions(-DLUA_BUILD_AS_DLL)
++elseif(APPLE)
++    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
++    add_library(lua STATIC ${LUA_SOURCE})
++    add_definitions(-DLUA_USE_LINUX)
++    target_link_libraries(lua -lreadline)
++else()
++    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
++    add_library(lua STATIC ${LUA_SOURCE})
++endif()
++
++install(TARGETS lua DESTINATION lib)
++install(FILES src/lua.h src/luaconf.h src/lualib.h src/lauxlib.h DESTINATION include)
