@@ -4,7 +4,7 @@ HERE = $(shell pwd)
 BIN = $(HERE)/bin
 GOBIN = $(HERE)/bin/go
 HGBIN = $(HERE)/pythonVE/bin/hg
-GOCMD = LD_LIBRARY_PATH=${BIN} DYLD_LIBRARY_PATH=${BIN} GOPATH=$(HERE) $(GOBIN)
+GOCMD = GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
 
 ifeq ($(MAKECMDGOALS),test-bench)
@@ -23,7 +23,7 @@ clean-src:
 	rm -rf src/*
 
 clean-heka:
-	rm -f bin/hekad bin/libsandbox.so
+	rm -f bin/hekad
 
 clean-all: clean-go clean-src clean-heka
 
@@ -63,7 +63,7 @@ build/go:
 		$(HGBIN) clone -u 0a4f1eb9372f https://code.google.com/p/go
 
 $(GOBIN): build/go
-	cd build/go/src && \
+	PATH="$(BIN):$(HERE)/pythonVE/bin:$(PATH)" cd build/go/src && \
 		./all.bash
 	cp build/go/bin/go $(HERE)/bin/go
 
@@ -142,6 +142,16 @@ rpms: moz-plugins build docs
 
 debs: moz-plugins build docs
 	./scripts/make_pkgs.sh deb
+
+osx: build docs
+	mkdir -p osxproto/lib
+	mkdir -p osxproto/bin
+	mkdir -p osxproto/share/man/man1
+	mkdir -p osxproto/share/man/man5
+	cp bin/hekad osxproto/bin/
+	cp bin/libsandbox.dylib osxproto/lib/
+	cp src/github.com/mozilla-services/heka/docs/build/man/*.1 osxproto/share/man/man1/
+	cp src/github.com/mozilla-services/heka/docs/build/man/*.5 osxproto/share/man/man5/
 
 dev: heka-source
 	cd src/github.com/mozilla-services/heka && \

@@ -15,16 +15,18 @@ mkdir -p $ROOT/usr/bin
 mkdir -p $ROOT/etc
 mkdir -p $ROOT/usr/share/man/man1
 mkdir -p $ROOT/usr/share/man/man5
+mkdir -p $ROOT/usr/lib
 mkdir -p $1s
 VERSION=`./bin/hekad -version`
 cp bin/hekad $ROOT/usr/bin
-cp sample/hekad.json $ROOT/etc/hekad.json.sample
+cp bin/libsandbox.so $ROOT/usr/lib
+cp sample/hekad.toml $ROOT/etc/hekad.toml.sample
 cp src/github.com/mozilla-services/heka/docs/build/man/hekad.1 $ROOT/usr/share/man/man1
 cp src/github.com/mozilla-services/heka/docs/build/man/hekad.*.5 $ROOT/usr/share/man/man5
 gzip $ROOT/usr/share/man/man1/hekad.1
 gzip $ROOT/usr/share/man/man5/hekad.*
 cd $ROOT
-fpm -s dir -t $1 -n "hekad" -v $VERSION --iteration ${ITERATION:-1} .
+fpm -s dir -t $1 -n "hekad" -v $VERSION --iteration ${ITERATION:-1} --license "MPLv2.0" --vendor Mozilla -m "<services-dev@mozilla.org>" --url "http://hekad.readthedocs.org" --description "High performance data gathering, analysis, monitoring, and reporting." .
 mv hekad*$VERSION-$ITERATION*.$1 ../$1s
 cd ..
 rm -fr tmp_pkg_root
