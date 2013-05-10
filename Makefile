@@ -6,7 +6,6 @@ GOBIN = $(HERE)/bin/go
 HGBIN = $(HERE)/pythonVE/bin/hg
 GOCMD = GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
-SANDBOX = $(HERE)/src/github.com/mozilla-services/heka/sandbox/lua/lua_sandbox.go
 
 ifeq ($(MAKECMDGOALS),test-bench)
 	BENCH = -bench .
@@ -83,10 +82,8 @@ heka-source: src/github.com/mozilla-services/heka/README.md
 
 bin/hekad: pluginloader heka-source $(HERE)/pythonVE $(GOBIN)
 	@GOPATH=$GOPATH python scripts/update_deps.py package_deps.txt
-	@perl -pi.bak -e "s,HEKABUILDPATH,$(HERE),g" $(SANDBOX)
 	@cd src && \
 		$(GOCMD) install github.com/mozilla-services/heka/cmd/hekad
-	@mv $(SANDBOX).bak $(SANDBOX)
 
 hekad: sandbox bin/hekad
 
