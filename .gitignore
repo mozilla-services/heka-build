@@ -20,6 +20,7 @@ _cgo_export.*
 _testmain.go
 
 *.exe
+virtualenv-*.tar.gz
 
 bin/
 build/
@@ -31,4 +32,5 @@ src/
 release/
 pythonVE/
 virtualenv/
+dashboard/
 
