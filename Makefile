@@ -63,8 +63,8 @@ build/go:
 		$(HGBIN) clone -u 0a4f1eb9372f https://code.google.com/p/go
 
 $(GOBIN): build/go
-	PATH="$(BIN):$(HERE)/pythonVE/bin:$(PATH)" cd build/go/src && \
-		./all.bash
+	cd build/go/src && \
+	PATH="$(BIN):$(HERE)/pythonVE/bin:$(PATH)" ./all.bash
 	cp build/go/bin/go $(HERE)/bin/go
 
 sandbox: heka-source
@@ -81,7 +81,7 @@ src/github.com/mozilla-services/heka/README.md:
 heka-source: src/github.com/mozilla-services/heka/README.md
 
 bin/hekad: pluginloader heka-source $(HERE)/pythonVE $(GOBIN)
-	@GOPATH=$GOPATH python scripts/update_deps.py package_deps.txt
+	GOPATH=$GOPATH PATH="$(HERE)/pythonVE/bin:$(PATH)" python scripts/update_deps.py package_deps.txt
 	@cd src && \
 		$(GOCMD) install github.com/mozilla-services/heka/cmd/hekad
 
