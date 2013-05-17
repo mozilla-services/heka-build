@@ -60,7 +60,7 @@ build/go:
 	fi
 	mkdir -p build
 	cd build && \
-		$(HGBIN) clone -u 0a4f1eb9372f https://code.google.com/p/go
+		$(HGBIN) clone -u e570c2daeaca https://code.google.com/p/go
 
 $(GOBIN): build/go
 	cd build/go/src && \
