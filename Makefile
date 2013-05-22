@@ -144,12 +144,10 @@ debs: moz-plugins build docs
 	./scripts/make_pkgs.sh deb
 
 osx: build docs
-	mkdir -p osxproto/lib
 	mkdir -p osxproto/bin
 	mkdir -p osxproto/share/man/man1
 	mkdir -p osxproto/share/man/man5
 	cp bin/hekad osxproto/bin/
-	cp bin/libsandbox.dylib osxproto/lib/
 	cp src/github.com/mozilla-services/heka/docs/build/man/*.1 osxproto/share/man/man1/
 	cp src/github.com/mozilla-services/heka/docs/build/man/*.5 osxproto/share/man/man5/
 
