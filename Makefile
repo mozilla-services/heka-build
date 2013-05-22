@@ -92,6 +92,16 @@ bin/flood:
 
 flood: bin/flood
 
+bin/sbmgr:
+	$(GOCMD) install github.com/mozilla-services/heka/cmd/sbmgr
+
+sbmgr: bin/sbmgr
+
+bin/sbmgrload:
+	$(GOCMD) install github.com/mozilla-services/heka/cmd/sbmgrload
+
+sbmgrload: bin/sbmgrload
+
 src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
 	mkdir -p src/github.com/mozilla-services
 	cd src/github.com/mozilla-services && \
