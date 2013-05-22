@@ -15,11 +15,9 @@ mkdir -p $ROOT/usr/bin
 mkdir -p $ROOT/etc
 mkdir -p $ROOT/usr/share/man/man1
 mkdir -p $ROOT/usr/share/man/man5
-mkdir -p $ROOT/usr/lib
 mkdir -p $1s
 VERSION=`./bin/hekad -version`
 cp bin/hekad $ROOT/usr/bin
-cp bin/libsandbox.so $ROOT/usr/lib
 cp sample/hekad.toml $ROOT/etc/hekad.toml.sample
 cp src/github.com/mozilla-services/heka/docs/build/man/hekad.1 $ROOT/usr/share/man/man1
 cp src/github.com/mozilla-services/heka/docs/build/man/hekad.*.5 $ROOT/usr/share/man/man5
