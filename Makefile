@@ -60,11 +60,11 @@ build/go:
 	fi
 	mkdir -p build
 	cd build && \
-		$(HGBIN) clone -u 0a4f1eb9372f https://code.google.com/p/go
+		$(HGBIN) clone -u e570c2daeaca https://code.google.com/p/go
 
 $(GOBIN): build/go
-	PATH="$(BIN):$(HERE)/pythonVE/bin:$(PATH)" cd build/go/src && \
-		./all.bash
+	cd build/go/src && \
+	PATH="$(BIN):$(HERE)/pythonVE/bin:$(PATH)" ./all.bash
 	cp build/go/bin/go $(HERE)/bin/go
 
 sandbox: heka-source
@@ -81,7 +81,7 @@ src/github.com/mozilla-services/heka/README.md:
 heka-source: src/github.com/mozilla-services/heka/README.md
 
 bin/hekad: pluginloader heka-source $(HERE)/pythonVE $(GOBIN)
-	@GOPATH=$GOPATH python scripts/update_deps.py package_deps.txt
+	GOPATH=$GOPATH PATH="$(HERE)/pythonVE/bin:$(PATH)" python scripts/update_deps.py package_deps.txt
 	@cd src && \
 		$(GOCMD) install github.com/mozilla-services/heka/cmd/hekad
 
@@ -154,12 +154,10 @@ debs: moz-plugins build docs
 	./scripts/make_pkgs.sh deb
 
 osx: build docs
-	mkdir -p osxproto/lib
 	mkdir -p osxproto/bin
 	mkdir -p osxproto/share/man/man1
 	mkdir -p osxproto/share/man/man5
 	cp bin/hekad osxproto/bin/
-	cp bin/libsandbox.dylib osxproto/lib/
 	cp src/github.com/mozilla-services/heka/docs/build/man/*.1 osxproto/share/man/man1/
 	cp src/github.com/mozilla-services/heka/docs/build/man/*.5 osxproto/share/man/man5/
 

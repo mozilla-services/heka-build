@@ -238,7 +238,7 @@ def main():
     cmds = locate_commands()
     for pkg in packages:
         if pkg.type not in cmds:
-            raise Exception("Unable to find command to handle %s" % pkg["type"])
+            raise Exception("Unable to find command to handle %s" % pkg.type)
 
     # Locate the src directory and change to it
     os.chdir(src_dir)
