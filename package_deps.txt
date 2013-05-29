@@ -3,5 +3,6 @@ github.com/rafrombrc/whisper-go master
 github.com/rafrombrc/go-notify master
 github.com/ugorji/go-msgpack master
 github.com/bbangert/toml master
+github.com/streadway/amqp master
 code.google.com/p/go-uuid.hg default
 code.google.com/p/goprotobuf.hg default
