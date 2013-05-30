@@ -147,10 +147,10 @@ test-all: test
 pluginloader: heka-source
 	./scripts/setup_pluginloader.py
 
-rpms: moz-plugins build docs
+rpms: moz-plugins build docs sbmgr flood
 	./scripts/make_pkgs.sh rpm
 
-debs: moz-plugins build docs
+debs: moz-plugins build docs sbmgr flood
 	./scripts/make_pkgs.sh deb
 
 osx: build docs
