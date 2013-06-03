@@ -18,6 +18,8 @@ mkdir -p $ROOT/usr/share/man/man5
 mkdir -p $1s
 VERSION=`./bin/hekad -version`
 cp bin/hekad $ROOT/usr/bin
+cp bin/sbmgr $ROOT/usr/bin
+cp bin/flood $ROOT/usr/bin
 cp sample/hekad.toml $ROOT/etc/hekad.toml.sample
 cp src/github.com/mozilla-services/heka/docs/build/man/hekad.1 $ROOT/usr/share/man/man1
 cp src/github.com/mozilla-services/heka/docs/build/man/hekad.*.5 $ROOT/usr/share/man/man5
