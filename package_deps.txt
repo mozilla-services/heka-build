@@ -1,8 +1,8 @@
-github.com/bitly/go-simplejson master
-github.com/rafrombrc/whisper-go master
-github.com/rafrombrc/go-notify master
-github.com/ugorji/go-msgpack master
-github.com/bbangert/toml master
+github.com/bitly/go-simplejson ec501b3f691bcc79d97caf8fdf28bcf136efdab8
+github.com/rafrombrc/whisper-go 7d2ad862feed91393b9b0862946963040a5f9dc0
+github.com/rafrombrc/go-notify e3ddb616eea90d4e87dff8513c251ff514678406
+github.com/ugorji/go-msgpack 51335cb63a7b31e41b34294a05e7f5d53d7a52f6
+github.com/bbangert/toml 787b5d888542c02b1f249efa62214da28b995b6b
 github.com/streadway/amqp 171c24a86dfdd0ab079c4077500fd6bf59b6b00b
 code.google.com/p/go-uuid.hg default
 code.google.com/p/goprotobuf.hg default
