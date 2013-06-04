@@ -99,6 +99,7 @@ class GitPackage(Package):
             print("Warning: Local modifications detected in %s, "
                 "skipping update." % self.repo)
             return
+        run_command("git pull")
         run_command("git checkout -f %s" % self.changeset)
 
     def needs_update(self):
