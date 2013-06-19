@@ -1,4 +1,4 @@
-# This configuration reads the system log, streams it as is with serialization to
+# This configuration reads the system log, streams it as is without serialization to
 # amqp, reads the stream back off amqp and transforms it into the messages that
 # are used to increment the stats counters
 [AMQPInput]
@@ -36,6 +36,7 @@ MatchRegex = '/.*/'
 
 [leftovers.MessageFields]
 Type = "drop"
+Logger = "drop"
 Payload = ""
 
 [CounterFilter]
@@ -77,3 +78,4 @@ url = "amqp://guest:guest@rabbitmq/"
 exchange = "testout"
 exchangeType = "fanout"
 message_matcher = 'Logger == "/var/log/system.log"'
+serialize = false
