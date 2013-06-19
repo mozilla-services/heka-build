@@ -1,0 +1,73 @@
+[AMQPInput]
+url = "amqp://guest:guest@rabbitmq/"
+exchange = "testout"
+exchangeType = "fanout"
+decoders = ["logparser", "leftovers"]
+
+[LogfileInput]
+LogFiles = ["/var/log/system.log"]
+Hostname = "lars"
+
+[StatsdInput]
+address = "127.0.0.1:29301"
+flushInterval = 5
+
+[logparser]
+type = "LoglineDecoder"
+MatchRegex = '/\w+ \d+ \d+:\d+:\d+ \S+ (?P<Reporter>[^\[]+)\[(?P<Pid>\d+)](?P<Sandbox>[^:]+)?: (?P<Remaining>.*)/'
+
+[logparser.MessageFields]
+Type = "amqplogline"
+Hostname = "lars"
+Reporter = "%Reporter%"
+Remaining = "%Remaining%"
+Logger = "%Logger%"
+Payload = "%Remaining%"
+
+[leftovers]
+type = "LoglineDecoder"
+MatchRegex = '/.*/'
+
+[leftovers.MessageFields]
+Type = "drop"
+Payload = ""
+
+[CounterFilter]
+message_matcher = 'Type != "heka.counter-output"'
+ticker_interval = 1
+
+[Hits]
+type = "StatFilter"
+message_matcher = 'Type == "amqplogline"'
+
+[Hits.Metric.1]
+type = "Counter"
+name = "%Hostname%.%Reporter%"
+value = "1"
+
+[Hits.Metric.2]
+type = "Counter"
+name = "%Hostname%.%Logger%"
+value = "%Remaining%"
+
+[AMQPHits]
+type = "StatFilter"
+message_matcher = 'Type == "amqp"'
+
+[AMQPHits.Metric.1]
+type = "Counter"
+name = "amqp.message"
+value = "1"
+
+[LogOutput]
+message_matcher = 'Type == "statmetric" || Type == "amqp"'
+
+[DashboardOutput]
+message_matcher = "Type == 'heka.all-report' || Type == 'heka.sandbox-output' || Type == 'heka.sandbox-terminated'"
+ticker_interval = 1
+
+[AMQPOutput]
+url = "amqp://guest:guest@rabbitmq/"
+exchange = "testout"
+exchangeType = "fanout"
+message_matcher = 'Logger == "/var/log/system.log"'
