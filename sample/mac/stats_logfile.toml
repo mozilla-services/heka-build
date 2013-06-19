@@ -1,0 +1,65 @@
+[LogfileInput]
+LogFile = "/var/log/system.log"
+Hostname = "thishost"
+SeekJournal = "./seekjournals"
+Decoders = ["logparser", "leftovers"]
+
+[StatAccumInput]
+flush_interval = 5
+
+[StatsdInput]
+address = ":29301"
+
+[logparser]
+type = "LoglineDecoder"
+MatchRegex = '/\w+ \d+ \d+:\d+:\d+ \S+ (?P<Reporter>[^\[]+)\[(?P<Pid>\d+)](?P<Sandbox>[^:]+)?: (?P<Remaining>.*)/'
+
+[logparser.MessageFields]
+Type = "amqplogline"
+Hostname = "lars"
+Reporter = "%Reporter%"
+Remaining = "%Remaining%"
+Logger = "%Logger%"
+Payload = "%Remaining%"
+
+[leftovers]
+type = "LoglineDecoder"
+MatchRegex = '/.*/'
+
+[leftovers.MessageFields]
+Type = "drop"
+Payload = ""
+
+[CounterFilter]
+message_matcher = 'Type != "heka.counter-output"'
+ticker_interval = 1
+
+[Hits]
+type = "StatFilter"
+message_matcher = 'Type == "amqplogline"'
+
+[Hits.Metric.1]
+type = "Counter"
+name = "%Hostname%.%Reporter%"
+value = "1"
+
+[Hits.Metric.2]
+type = "Counter"
+name = "%Hostname%.%Logger%"
+value = "%Remaining%"
+
+[AMQPHits]
+type = "StatFilter"
+message_matcher = 'Type == "amqp"'
+
+[AMQPHits.Metric.1]
+type = "Counter"
+name = "amqp.message"
+value = "1"
+
+[LogOutput]
+message_matcher = 'Type == "heka.statmetric"'
+
+[DashboardOutput]
+message_matcher = "Type == 'heka.all-report' || Type == 'heka.sandbox-output' || Type == 'heka.sandbox-terminated'"
+ticker_interval = 1
