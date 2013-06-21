@@ -7,4 +7,4 @@ github.com/streadway/amqp 171c24a86dfdd0ab079c4077500fd6bf59b6b00b
 code.google.com/p/go-uuid.hg default
 code.google.com/p/goprotobuf.hg default
 github.com/feyeleanor/sets 6c54cb57ea406ff6354256a4847e37298194478f
-github.com/crowdmob/goamz b67889fac1cd5a7aec7521551f05c534e6622f1c
+github.com/crowdmob/goamz 7168305bd984b32bef7157a672e2460d0b0bba2f
