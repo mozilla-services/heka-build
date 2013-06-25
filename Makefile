@@ -2,7 +2,7 @@ APPNAME = hekad
 DEPS =
 HERE = $(shell pwd)
 BIN = $(HERE)/bin
-GOBIN = $(HERE)/bin/go
+GOBIN = $(GOROOT)/bin/go
 HGBIN = $(HERE)/pythonVE/bin/hg
 GOCMD = GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
@@ -53,20 +53,6 @@ docs: $(HERE)/heka-docs $(HERE)/pythonVE/bin/sphinx-build bin/hekad
 		make html SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build && \
 		make man SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build
 
-build/go:
-	if [ ! -f $(HGBIN) ]; \
-	then \
-		$(HERE)/pythonVE/bin/pip install -U Mercurial; \
-	fi
-	mkdir -p build
-	cd build && \
-		$(HGBIN) clone -u a7bd9a33067b https://code.google.com/p/go
-
-$(GOBIN): build/go
-	cd build/go/src && \
-	PATH="$(BIN):$(HERE)/pythonVE/bin:$(PATH)" ./all.bash
-	cp build/go/bin/go $(HERE)/bin/go
-
 sandbox: heka-source
 	mkdir -p release
 	cd release && cmake .. && make
@@ -83,7 +69,7 @@ heka-source: src/github.com/mozilla-services/heka/README.md
 bin/hekad: pluginloader heka-source $(HERE)/pythonVE $(GOBIN)
 	GOPATH=$GOPATH PATH="$(HERE)/pythonVE/bin:$(PATH)" python scripts/update_deps.py package_deps.txt
 	@cd src && \
-		$(GOCMD) install github.com/mozilla-services/heka/cmd/hekad
+		$(GOCMD) install -ldflags="-linkmode=external"  github.com/mozilla-services/heka/cmd/hekad
 
 hekad: sandbox bin/hekad
 
@@ -134,9 +120,9 @@ gospec: src/github.com/rafrombrc/gospec/src/gospec
 
 test: hekad gomock gospec
 	$(GOCMD) test -i github.com/mozilla-services/heka/pipeline
-	$(GOCMD) test $(BENCH) github.com/mozilla-services/heka/pipeline
-	$(GOCMD) test $(BENCH) github.com/mozilla-services/heka/message
-	$(GOCMD) test $(BENCH) github.com/mozilla-services/heka/sandbox/lua
+	$(GOCMD) test -ldflags="-linkmode=external" $(BENCH) github.com/mozilla-services/heka/pipeline
+	$(GOCMD) test -ldflags="-linkmode=external" $(BENCH) github.com/mozilla-services/heka/message
+	$(GOCMD) test -ldflags="-linkmode=external" $(BENCH) github.com/mozilla-services/heka/sandbox/lua
 
 test-bench: test
 
