@@ -2,7 +2,8 @@ APPNAME = hekad
 DEPS =
 HERE = $(shell pwd)
 BIN = $(HERE)/bin
-GOBIN = $(GOROOT)/bin/go
+GOBIN = $(HERE)/bin/go
+
 HGBIN = $(HERE)/pythonVE/bin/hg
 GOCMD = GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
@@ -52,6 +53,30 @@ docs: $(HERE)/heka-docs $(HERE)/pythonVE/bin/sphinx-build bin/hekad
 	cd src/github.com/mozilla-services/heka/docs && \
 		make html SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build && \
 		make man SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build
+
+build/go: FORCE
+	if [ ! -f $(GOROOT)/bin/go ]; \
+	then \
+		if [ ! -f $(HGBIN) ]; \
+		then \
+			$(HERE)/pythonVE/bin/pip install -U Mercurial; \
+		fi && \
+		mkdir -p build && \
+		cd build && \
+			$(HGBIN) clone -u a7bd9a33067b https://code.google.com/p/go; \
+	fi
+
+$(GOBIN): build/go
+	if [ ! -d $(HERE)/build/go/bin ]; \
+	then \
+		cd build/go/src; \
+		PATH="$(BIN):$(HERE)/pythonVE/bin:$(PATH)" ./all.bash; \
+		cp build/go/bin/go $(HERE)/bin/go; \
+		echo "Using build/go/bin/go bin as go binary"; \
+	else \
+		cp $(GOROOT)/bin/go $(HERE)/bin/go; \
+		echo "Using $(GOROOT)/bin/go bin as go binary"; \
+	fi
 
 sandbox: heka-source
 	mkdir -p release
@@ -185,3 +210,5 @@ undev: heka-source
 		git config remote.origin.url https://github.com/mozilla-services/heka-docs.git && \
 		git checkout master; \
 	fi
+
+FORCE:
