@@ -1,5 +1,5 @@
-APPNAME = hekad
-DEPS =
+APPNAME = hekad 
+DEPS = 
 HERE = $(shell pwd)
 BIN = $(HERE)/bin
 GOBIN = $(HERE)/bin/go
@@ -8,14 +8,16 @@ HGBIN = $(HERE)/pythonVE/bin/hg
 GOCMD = GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
 
+CHECK_GOROOT_CMD = python scripts/check_goroot.py $(HERE)
+
 ifeq ($(MAKECMDGOALS),test-bench)
 	BENCH = -bench .
 endif
 
-.PHONY: all build test clean-env clean gospec moz-plugins
+.PHONY: all build test clean-env clean gospec moz-plugins check_goroot
 .SILENT: test
-
-all: build
+ 
+all: check_goroot build
 
 clean-go:
 	rm -rf bin/go build
@@ -54,7 +56,7 @@ docs: $(HERE)/heka-docs $(HERE)/pythonVE/bin/sphinx-build bin/hekad
 		make html SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build && \
 		make man SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build
 
-build/go: FORCE
+build/go:
 	if [ ! -f $(GOROOT)/bin/go ]; \
 	then \
 		if [ ! -f $(HGBIN) ]; \
@@ -67,11 +69,14 @@ build/go: FORCE
 	fi
 
 $(GOBIN): build/go
-	if [ ! -d $(HERE)/build/go/bin ]; \
+	if [ -d $(HERE)/build/go ]; \
 	then \
-		cd build/go/src; \
-		PATH="$(BIN):$(HERE)/pythonVE/bin:$(PATH)" ./all.bash; \
-		cp build/go/bin/go $(HERE)/bin/go; \
+		if [ ! -f $(HERE)/build/go/bin/go ]; \
+		then \
+			cd build/go/src && \
+			PATH="$(BIN):$(HERE)/pythonVE/bin:$(PATH)" ./all.bash; \
+		fi && \
+		cp $(HERE)/build/go/bin/go $(HERE)/bin/go && \
 		echo "Using build/go/bin/go bin as go binary"; \
 	else \
 		cp $(GOROOT)/bin/go $(HERE)/bin/go; \
@@ -210,5 +215,9 @@ undev: heka-source
 		git config remote.origin.url https://github.com/mozilla-services/heka-docs.git && \
 		git checkout master; \
 	fi
+
+check_goroot: FORCE
+	$(CHECK_GOROOT_CMD)
+
 
 FORCE:
