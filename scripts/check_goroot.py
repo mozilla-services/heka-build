@@ -9,16 +9,18 @@ If GOROOT isn't defined try to give a useful suggestion.
 """
 
 import os
+import os.path
 import sys
 import re
 import subprocess
 from distutils.version import StrictVersion
 
 REV_REGEX = re.compile(r"go version go(\d+\.\d+)")
+HERE = os.getcwd()
 
 VALID_GOROOTS = ['/usr/lib/go',
                  '/usr/local/go',
-                 ]
+                 os.path.join(HERE, 'build', 'go')]
 
 if len(sys.argv) > 1:
     hg_go = os.path.normpath('%s/build/go' % sys.argv[1])
