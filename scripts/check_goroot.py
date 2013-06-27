@@ -46,16 +46,8 @@ def find_goroot():
                     go_roots['invalid'] = p
 
     if go_roots['valid']:
-        msg = "Error: GOROOT should be set to this: [%s]" % go_roots['valid']
-    elif go_roots['invalid']:
-        msg = """Error: No valid GOROOT could be found.
-An old version of Go was found here: [%s]""" % go_roots['invalid']
-    else:
-        msg = """Error: Can't find any version of Go installed.
-Try installing from a package from https://code.google.com/p/go/downloads/"""
-
-    print msg
-    return go_roots
+        return go_roots['valid']
+    return ""
 
 def version_check(go_bin):
     """
@@ -70,14 +62,9 @@ def version_check(go_bin):
 
 if __name__ == "__main__":
     if not GOROOT:
-        print "Error: GOROOT is not set"
-        find_goroot()
-        sys.exit(1)
+        GOROOT = find_goroot()
 
     go_bin = os.path.join(GOROOT, 'bin/go')
     if os.path.isfile(go_bin) and version_check(go_bin):
-        sys.exit(0)
-
-    find_goroot()
-    sys.exit(1)
+        print GOROOT
 

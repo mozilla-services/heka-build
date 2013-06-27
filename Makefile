@@ -2,13 +2,19 @@ APPNAME = hekad
 DEPS =
 HERE = $(shell pwd)
 BIN = $(HERE)/bin
-GOBIN = $(HERE)/bin/go
 
 HGBIN = $(HERE)/pythonVE/bin/hg
-GOCMD = GOPATH=$(HERE) $(GOBIN)
+
+CHECK_GOROOT_CMD = python scripts/check_goroot.py
+GOROOT = $(shell $(CHECK_GOROOT_CMD))
+ifeq ($(GOROOT),)
+    $(error "Can't find working Go installation. Either install Go 1.1 or greater, or set GOROOT if you already have a working Go 1.1 or greater installation in a non-standard location")
+endif
+
+GOBIN = $(GOROOT)/bin/go
+GOCMD = GOROOT=$(GOROOT) GOPATH=$(HERE) $(GOBIN)
 GOPATH = $GOPATH:$(HERE)
 
-CHECK_GOROOT_CMD = python scripts/check_goroot.py $(GOROOT)
 
 ifeq ($(MAKECMDGOALS),test-bench)
 	BENCH = -bench .
@@ -56,9 +62,6 @@ docs: $(HERE)/heka-docs $(HERE)/pythonVE/bin/sphinx-build bin/hekad
 		make html SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build && \
 		make man SPHINXBUILD=$(HERE)/pythonVE/bin/sphinx-build
 
-$(GOBIN): FORCE check_goroot
-	cp $(GOROOT)/bin/go $(HERE)/bin/go
-
 sandbox: heka-source
 	mkdir -p release
 	cd release && cmake .. && make
@@ -72,7 +75,7 @@ src/github.com/mozilla-services/heka/README.md:
 
 heka-source: src/github.com/mozilla-services/heka/README.md
 
-bin/hekad: pluginloader heka-source $(HERE)/pythonVE $(GOBIN)
+bin/hekad: pluginloader heka-source $(HERE)/pythonVE
 	GOPATH=$GOPATH PATH="$(HERE)/pythonVE/bin:$(PATH)" python scripts/update_deps.py package_deps.txt
 	@cd src && \
 		$(GOCMD) install -ldflags="-linkmode=external"  github.com/mozilla-services/heka/cmd/hekad
@@ -191,9 +194,5 @@ undev: heka-source
 		git config remote.origin.url https://github.com/mozilla-services/heka-docs.git && \
 		git checkout master; \
 	fi
-
-check_goroot: FORCE
-	$(CHECK_GOROOT_CMD)
-
 
 FORCE:
