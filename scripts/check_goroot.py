@@ -53,8 +53,8 @@ def version_check(go_bin):
     """
     Check that we're using at least go 1.1
     """
-    cmd = '%s version' % go_bin
-    version = subprocess.check_output(cmd, shell=True).strip()
+    cmd = [go_bin, 'version']
+    version = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0]
     match = REV_REGEX.match(version)
     goversion = match.groups()[0]
     return StrictVersion(goversion) >= StrictVersion("1.1")
