@@ -12,9 +12,9 @@ import os
 import sys
 import re
 import subprocess
+from distutils.version import StrictVersion
 
-
-REV_REGEX = re.compile(r"go version go(\S+) ")
+REV_REGEX = re.compile(r"go version go(\d+\.\d+)")
 
 VALID_GOROOTS = ['/usr/lib/go',
                  '/usr/local/go',
@@ -62,13 +62,8 @@ def version_check(go_bin):
     cmd = '%s version' % go_bin
     version = subprocess.check_output(cmd, shell=True).strip()
     match = REV_REGEX.match(version)
-    groups = match.groups()
-    revision_parts = [int(x) for x in groups[0].split('.')]
-
-    major = revision_parts[0]
-    minor = revision_parts[1]
-
-    return float("%d.%d" % (major, minor)) >= 1.1
+    goversion = match.groups()[0]
+    return StrictVersion(goversion) >= StrictVersion("1.1")
 
 
 if __name__ == "__main__":
