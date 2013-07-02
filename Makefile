@@ -129,6 +129,8 @@ gospec: src/github.com/rafrombrc/gospec/src/gospec
 
 test: hekad gomock gospec
 	$(GOCMD) test -i github.com/mozilla-services/heka/pipeline
+	$(GOCMD) test -i github.com/mozilla-services/heka/cmd/hekad
+	$(GOCMD) test -ldflags="-linkmode=external" github.com/mozilla-services/heka/cmd/hekad
 	$(GOCMD) test -ldflags="-linkmode=external" $(BENCH) github.com/mozilla-services/heka/pipeline
 	$(GOCMD) test -ldflags="-linkmode=external" $(BENCH) github.com/mozilla-services/heka/message
 	$(GOCMD) test -ldflags="-linkmode=external" $(BENCH) github.com/mozilla-services/heka/sandbox/lua
