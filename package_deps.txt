@@ -6,3 +6,5 @@ github.com/bbangert/toml daeafb907545245cc4b1540c905b777899e13553
 github.com/streadway/amqp 171c24a86dfdd0ab079c4077500fd6bf59b6b00b
 code.google.com/p/go-uuid.hg default
 code.google.com/p/goprotobuf.hg default
+github.com/feyeleanor/sets 6c54cb57ea406ff6354256a4847e37298194478f
+github.com/crowdmob/goamz 7168305bd984b32bef7157a672e2460d0b0bba2f
