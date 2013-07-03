@@ -27,8 +27,9 @@ gzip $ROOT/usr/share/man/man1/hekad.1
 gzip $ROOT/usr/share/man/man5/hekad.*
 if [ $1 == "tarball" ]; then
 	mv $ROOT hekad-$VERSION
-	tar zcf hekad-$VERSION.tar.gz hekad-$VERSION
-	mv hekad-$VERSION.tar.gz ./$1s/
+	OUTNAME=hekad-$VERSION-${ITERATION:-1}.${PLATFORM:-`uname -i`}.tar.gz
+	tar zcf $OUTNAME hekad-$VERSION
+	mv $OUTNAME ./$1s/
 	rm -fr hekad-$VERSION
 else
 	cd $ROOT
