@@ -148,6 +148,9 @@ rpms: moz-plugins build docs sbmgr flood
 debs: moz-plugins build docs sbmgr flood
 	./scripts/make_pkgs.sh deb
 
+tarballs: moz-plugins docs sbmgr flood
+	./scripts/make_pkgs.sh tarball
+
 osx: build docs
 	mkdir -p osxproto/bin
 	mkdir -p osxproto/share/man/man1

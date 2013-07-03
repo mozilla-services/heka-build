@@ -5,8 +5,8 @@ command -v fpm >/dev/null 2>&1 || {
 	exit 1
 }
 
-if [ $1 != "rpm" -a $1 != "deb" ]; then
-	echo >&2 "usage: make_pkgs.sh [deb|rpm]"
+if [ $1 != "rpm" -a $1 != "deb" -a $1 != "tarball" ]; then
+	echo >&2 "usage: make_pkgs.sh [deb|rpm|tarball]"
 	exit 1
 fi
 
@@ -25,8 +25,15 @@ cp src/github.com/mozilla-services/heka/docs/build/man/hekad.1 $ROOT/usr/share/m
 cp src/github.com/mozilla-services/heka/docs/build/man/hekad.*.5 $ROOT/usr/share/man/man5
 gzip $ROOT/usr/share/man/man1/hekad.1
 gzip $ROOT/usr/share/man/man5/hekad.*
-cd $ROOT
-fpm -s dir -t $1 -n "hekad" -v $VERSION --iteration ${ITERATION:-1} --license "MPLv2.0" --vendor Mozilla -m "<services-dev@mozilla.org>" --url "http://hekad.readthedocs.org" --description "High performance data gathering, analysis, monitoring, and reporting." .
-mv hekad*$VERSION-$ITERATION*.$1 ../$1s
-cd ..
-rm -fr tmp_pkg_root
+if [ $1 == "tarball" ]; then
+	mv $ROOT hekad-$VERSION
+	tar zcf hekad-$VERSION.tar.gz hekad-$VERSION
+	mv hekad-$VERSION.tar.gz ./$1s/
+	rm -fr hekad-$VERSION
+else
+	cd $ROOT
+	fpm -s dir -t $1 -n "hekad" -v $VERSION --iteration ${ITERATION:-1} --license "MPLv2.0" --vendor Mozilla -m "<services-dev@mozilla.org>" --url "http://hekad.readthedocs.org" --description "High performance data gathering, analysis, monitoring, and reporting." .
+	mv hekad*$VERSION-$ITERATION*.$1 ../$1s
+	cd ..
+	rm -fr $ROOT
+fi
