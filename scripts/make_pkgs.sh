@@ -31,6 +31,7 @@ if [ $1 == "tarball" ]; then
 	tar zcf $OUTNAME hekad-$VERSION
 	mv $OUTNAME ./$1s/
 	rm -fr hekad-$VERSION
+	echo "Generated ./$1s/$OUTNAME"
 else
 	cd $ROOT
 	fpm -s dir -t $1 -n "hekad" -v $VERSION --iteration ${ITERATION:-1} --license "MPLv2.0" --vendor Mozilla -m "<services-dev@mozilla.org>" --url "http://hekad.readthedocs.org" --description "High performance data gathering, analysis, monitoring, and reporting." .
