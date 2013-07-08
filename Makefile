@@ -22,7 +22,7 @@ endif
 
 .PHONY: all build test clean-env clean gospec moz-plugins check_goroot
 .SILENT: test
- 
+
 all: build
 
 clean-go:
@@ -101,6 +101,9 @@ src/github.com/mozilla-services/heka-mozsvc-plugins/README.md:
 	mkdir -p src/github.com/mozilla-services
 	cd src/github.com/mozilla-services && \
 		git clone https://github.com/mozilla-services/heka-mozsvc-plugins.git
+
+source: sandbox pluginloader heka-source $(HERE)/pythonVE
+	GOPATH=$GOPATH PATH="$(HERE)/pythonVE/bin:$(PATH)" python scripts/update_deps.py package_deps.txt
 
 moz-plugins-source: src/github.com/mozilla-services/heka-mozsvc-plugins/README.md
 
