@@ -1,19 +1,17 @@
 [hekad]
-cpuprof = "/var/log/hekad/cpuprofile.log"
-decoder_poolsize = 10
-max_message_loops = 4
+decoder_poolsize = 5
+max_message_loops = 8
 max_process_inject = 10
-max_timer_inject  = 10
-maxprocs = 10
-memprof = "/var/log/hekad/memprof.log"
+max_timer_inject  = 20
+maxprocs = 4
 plugin_chansize = 10
-poolsize = 100
+poolsize = 200
 
 [StatsdInput]
 address = "127.0.0.1:8125"
 
 [StatAccumInput]
-flush_interval = 5
+ticker_interval = 5
 
 [TcpInput]
 address = "127.0.0.1:5565"
@@ -35,9 +33,9 @@ message_matcher = "Type == 'heka.counter-output'"
 payload_only = true
 
 [WhisperOutput]
-basepath = "/var/run/hekad/whisper/db"
+base_path = "/var/run/hekad/whisper/db"
 message_matcher = "Type == 'heka.statmetric'"
-defaultaggmethod = 1
-defaultarchiveinfo = [ [0, 30, 1440], [0, 900, 192], [0, 3600, 168], [0, 43200, 1456] ]
+default_agg_method = 1
+default_archive_info = [ [0, 30, 1440], [0, 900, 192], [0, 3600, 168], [0, 43200, 1456] ]
 
 [DashboardOutput]
