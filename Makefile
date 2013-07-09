@@ -160,6 +160,27 @@ osx: build docs
 
 dev: heka-source
 	cd src/github.com/mozilla-services/heka && \
+	git config remote.origin.url https://github.com/mozilla-services/heka.git && \
+	git checkout dev && \
+	git submodule update --init --recursive; \
+	cd ../../../..; \
+	if [ -e src/github.com/mozilla-services/heka-mozsvc-plugins ]; \
+	then \
+	    cd src/github.com/mozilla-services/heka-mozsvc-plugins && \
+	    git config remote.origin.url https://github.com/mozilla-services/heka-mozsvc-plugins.git && \
+	    git checkout dev && \
+	    git submodule update --init --recursive; \
+	fi
+	if [ -e heka-docs ]; \
+	then \
+		cd heka-docs && \
+		git config remote.origin.url https://github.com/mozilla-services/heka-docs.git && \
+		git checkout dev && \
+		git submodule update --init --recursive; \
+	fi
+
+dev-ssh: heka-source
+	cd src/github.com/mozilla-services/heka && \
 	git config remote.origin.url git@github.com:mozilla-services/heka.git && \
 	git checkout dev && \
 	git submodule update --init --recursive; \
