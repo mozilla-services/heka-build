@@ -26,6 +26,7 @@ address = "127.0.0.1:5566"
 
 [StatsdFileOutput]
 type = "FileOutput"
+message_matcher = "Type == 'heka.statmetric'"
 path = "log/statsdonly.log"
 format = "json"
 
@@ -35,7 +36,7 @@ payload_only = true
 
 [WhisperOutput]
 basepath = "/var/run/hekad/whisper/db"
-message_matcher = "Type == 'statmetric'"
+message_matcher = "Type == 'heka.statmetric'"
 defaultaggmethod = 1
 defaultarchiveinfo = [ [0, 30, 1440], [0, 900, 192], [0, 3600, 168], [0, 43200, 1456] ]
 
