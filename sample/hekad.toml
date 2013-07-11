@@ -12,6 +12,7 @@ address = "127.0.0.1:8125"
 
 [StatAccumInput]
 ticker_interval = 5
+emit_in_payload = true
 
 [TcpInput]
 address = "127.0.0.1:5565"
