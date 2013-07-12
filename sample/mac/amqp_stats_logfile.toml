@@ -13,14 +13,13 @@ Hostname = "thishost"
 SeekJournal = "./seekjournals"
 
 [StatAccumInput]
-flush_interval = 5
 
 [StatsdInput]
 address = ":29301"
 
 [logparser]
 type = "LoglineDecoder"
-MatchRegex = '/\w+ \d+ \d+:\d+:\d+ \S+ (?P<Reporter>[^\[]+)\[(?P<Pid>\d+)](?P<Sandbox>[^:]+)?: (?P<Remaining>.*)/'
+match_regex = '\w+\s+\d+\s+\d+:\d+:\d+ \S+ (?P<Reporter>[^\[]+)\[(?P<Pid>\d+)](?P<Sandbox>[^:]+)?: (?P<Remaining>.*)'
 
 [logparser.MessageFields]
 Type = "amqplogline"
@@ -32,7 +31,7 @@ Payload = "%Remaining%"
 
 [leftovers]
 type = "LoglineDecoder"
-MatchRegex = '/.*/'
+match_regex = '/(.*)/'
 
 [leftovers.MessageFields]
 Type = "drop"
