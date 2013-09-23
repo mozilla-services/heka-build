@@ -1,8 +1,7 @@
 Heka-build
 ==========
 
-The Heka build project automatically sets up a complete Go environment with
-the necessary packages installed to build/compile/test the
-`heka <https://github.com/mozilla-services/heka/>`_ daemon. Instructions on
-how to do so can be found in the hekad
-`documentation <http://hekad.readthedocs.org/en/latest/installing.html>`_.
+This repo is obsolete. Heka's build is now driven entirely by cmake,
+and is contained entirely within the core Heka repository at
+https://github.com/mozilla-services/heka. Install instructions are
+at http://hekad.readthedocs.org/en/latest/installing.html.
